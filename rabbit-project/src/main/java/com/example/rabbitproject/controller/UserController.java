@@ -46,52 +46,44 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    @ResponseStatus( HttpStatus.OK )
-    public ResponseEntity<UserResponseDTO> getById (@PathVariable(value = "id") String id) throws NotFoundException {
-        return new ResponseEntity<>(UserMapper.entityToDTO(userSearchService.findById(id)), HttpStatus.OK);
+    public ResponseEntity<UserResponseDTO> getById (@PathVariable(value = "id") String id) {
+        return ResponseEntity.ok(UserMapper.entityToDTO(userSearchService.findById(id)));
     }
 
     @GetMapping(value = "/")
-    @ResponseStatus( HttpStatus.OK )
     public ResponseEntity<UserResponseListDTO> getAll () {
-        return new ResponseEntity<>(new UserResponseListDTO(UserMapper.entitiesToDTOs(userSearchService.findAll())),
-            HttpStatus.OK);
+        return ResponseEntity.ok(new UserResponseListDTO(UserMapper.entitiesToDTOs(userSearchService.findAll())));
     }
 
     @PostMapping
-    @ResponseStatus( HttpStatus.CREATED )
     public ResponseEntity<UserResponseDTO> create (@RequestBody UserCreateDTO userCreateDTO) throws Exception {
         User user = userPersistenceService.save(UserMapper.createDtoToEntity(userCreateDTO));
         return new ResponseEntity<>(UserMapper.entityToDTO(user), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
-    @ResponseStatus( HttpStatus.OK )
     public ResponseEntity<UserResponseDTO> update (
         @PathVariable(value = "id") String id,
         @RequestBody UserUpdateDTO userUpdateDTO) throws Exception {
         User user = userPersistenceService.update(id, UserMapper.updateDtoToEntity(userUpdateDTO));
-        return new ResponseEntity<>(UserMapper.entityToDTO(user), HttpStatus.OK);
+        return ResponseEntity.ok(UserMapper.entityToDTO(user));
     }
 
     @DeleteMapping(value = "/{id}")
-    @ResponseStatus( HttpStatus.NO_CONTENT )
-    public ResponseEntity delete (@PathVariable(value = "id") String id) throws Exception {
+    public ResponseEntity delete (@PathVariable(value = "id") String id) {
         userPersistenceService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/rabbit")
-    @ResponseStatus( HttpStatus.NO_CONTENT )
     public ResponseEntity send (@RequestBody UserSendDTO user) {
         userQueueSender.send(user);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/rest")
-    @ResponseStatus( HttpStatus.NO_CONTENT )
     public ResponseEntity sendAPI (@RequestBody UserSendDTO user) {
         userRestSender.sendAPI(user);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }
