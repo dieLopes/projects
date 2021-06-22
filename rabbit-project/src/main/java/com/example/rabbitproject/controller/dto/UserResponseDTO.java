@@ -9,6 +9,7 @@ public class UserResponseDTO implements Serializable {
     private String name;
     private String address;
     private String integrationId;
+    private String status;
 
     public String getId() {
         return id;
@@ -42,13 +43,22 @@ public class UserResponseDTO implements Serializable {
         this.integrationId = integrationId;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "UserResponseDTO{" +
-            "id='" + id + '\'' +
-            ", name='" + name + '\'' +
-            ", address='" + address + '\'' +
-            ", integrationId='" + integrationId + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", integrationId='" + integrationId + '\'' +
+                ", status='" + status + '\'' +
             '}';
     }
 }

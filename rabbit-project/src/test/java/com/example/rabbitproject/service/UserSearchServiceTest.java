@@ -1,26 +1,23 @@
 package com.example.rabbitproject.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
-
+import com.example.rabbitproject.builder.UserBuilder;
+import com.example.rabbitproject.domain.User;
+import com.example.rabbitproject.exception.UserNotFoundException;
+import com.example.rabbitproject.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.example.rabbitproject.builder.UserBuilder;
-import com.example.rabbitproject.domain.User;
-import com.example.rabbitproject.exception.UserNotFoundException;
-import com.example.rabbitproject.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserSearchServiceTest {
@@ -51,7 +48,7 @@ public class UserSearchServiceTest {
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
         assertThatThrownBy(() -> userSearchService.findById("some-id"))
             .isInstanceOf(UserNotFoundException.class)
-            .hasMessage("Usuário não encontrado com o id: some-id");
+            .hasMessage("User with id some-id not found");
         verify(userRepository).findById(anyString());
     }
 
@@ -80,5 +77,6 @@ public class UserSearchServiceTest {
                 tuple("some-id", "Some Name", "Some Address", "some-integration-id"),
                 tuple("another-id", "Another Name", "Another Address", "another-integration-id")
             );
+        verify(userRepository).findAll();
     }
 }

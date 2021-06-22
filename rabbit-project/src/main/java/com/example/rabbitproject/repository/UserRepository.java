@@ -1,11 +1,11 @@
 package com.example.rabbitproject.repository;
 
-import java.util.Optional;
-
+import com.example.rabbitproject.domain.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
-import com.example.rabbitproject.domain.User;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public interface UserRepository extends CrudRepository<User, String> {

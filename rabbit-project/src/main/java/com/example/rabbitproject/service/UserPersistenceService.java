@@ -1,15 +1,16 @@
 package com.example.rabbitproject.service;
 
-import com.example.rabbitproject.exception.UserNotFoundException;
-
-import org.springframework.stereotype.Component;
-
 import com.example.rabbitproject.domain.User;
+import com.example.rabbitproject.exception.UserNotFoundException;
 import com.example.rabbitproject.repository.UserRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
-
 import java.util.UUID;
+
+import static com.example.rabbitproject.domain.StatusEnum.ACTIVE;
 
 @Component
 public class UserPersistenceService {
@@ -23,17 +24,20 @@ public class UserPersistenceService {
         this.userSearchService = userSearchService;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public User save (@Valid User user) throws Exception {
         if (user.getId() != null) {
-            throw new Exception("O identificar do usuário não pode estar preenchido");
+            throw new Exception("User id must be null");
         }
+        user.setStatus(ACTIVE);
         user.setId(UUID.randomUUID().toString());
         return userRepository.save(user);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public User update (String id, @Valid User user) throws Exception {
         if (id == null) {
-            throw new Exception("O identificar do usuário não pode estar vazio");
+            throw new Exception("User id cannot be null");
         }
         User retrieveUser = userSearchService.findById(id);
         retrieveUser.setName(user.getName());
@@ -41,6 +45,7 @@ public class UserPersistenceService {
         return userRepository.save(retrieveUser);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void delete (String id) throws UserNotFoundException {
         User user = userSearchService.findById(id);
         userRepository.delete(user);

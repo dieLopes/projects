@@ -19,7 +19,7 @@ public class UserRestSender {
         this.restTemplate = restTemplate;
     }
 
-    public User sendAPI (UserSendDTO user) {
+    public User send(UserSendDTO user) {
         var createUserUrl = "http://localhost:8081/users";
         //var createUserUrl = "http://importusers.us-e2.cloudhub.io/users";
 

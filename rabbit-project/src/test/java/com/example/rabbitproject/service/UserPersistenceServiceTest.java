@@ -1,23 +1,19 @@
 package com.example.rabbitproject.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import com.example.rabbitproject.builder.UserBuilder;
+import com.example.rabbitproject.domain.User;
+import com.example.rabbitproject.exception.UserNotFoundException;
+import com.example.rabbitproject.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.example.rabbitproject.builder.UserBuilder;
-import com.example.rabbitproject.domain.User;
-import com.example.rabbitproject.exception.UserNotFoundException;
-import com.example.rabbitproject.repository.UserRepository;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserPersistenceServiceTest {
@@ -49,7 +45,7 @@ public class UserPersistenceServiceTest {
             .build();
         assertThatThrownBy(() -> userPersistenceService.save(user))
             .isInstanceOf(Exception.class)
-            .hasMessage("O identificar do usuário não pode estar preenchido");
+            .hasMessage("User id must be null");
         verify(userRepository, never()).save(any(User.class));
     }
 
@@ -75,7 +71,7 @@ public class UserPersistenceServiceTest {
             .build();
         assertThatThrownBy(() ->  userPersistenceService.update(user.getId(), user))
             .isInstanceOf(Exception.class)
-            .hasMessage("O identificar do usuário não pode estar vazio");
+            .hasMessage("User id cannot be null");
         verify(userRepository, never()).save(any(User.class));
     }
 

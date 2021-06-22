@@ -1,28 +1,21 @@
 package com.example.rabbitproject.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-import java.util.Collections;
-
+import com.example.rabbitproject.controller.dto.UserCreateDTO;
+import com.example.rabbitproject.controller.dto.UserResponseDTO;
+import com.example.rabbitproject.controller.dto.UserResponseListDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.example.rabbitproject.controller.dto.UserCreateDTO;
-import com.example.rabbitproject.controller.dto.UserResponseDTO;
-import com.example.rabbitproject.controller.dto.UserResponseListDTO;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -61,6 +54,7 @@ public class UserControllerIT {
         assertNotNull(responseEntity.getBody().getId());
         assertEquals("Some Name", responseEntity.getBody().getName());
         assertEquals("Some Address", responseEntity.getBody().getAddress());
+        assertEquals("ACTIVE", responseEntity.getBody().getStatus());
         assertNull(responseEntity.getBody().getIntegrationId());
     }
 
@@ -93,7 +87,7 @@ public class UserControllerIT {
         assertEquals(204, result.getStatusCodeValue());
     }
 
-    public ResponseEntity<UserResponseDTO> createUser (String name, String address) {
+    private ResponseEntity<UserResponseDTO> createUser (String name, String address) {
         UserCreateDTO user = new UserCreateDTO();
         user.setName(name);
         user.setAddress(address);

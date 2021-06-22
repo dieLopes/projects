@@ -1,5 +1,6 @@
 package com.example.rabbitproject.builder;
 
+import com.example.rabbitproject.domain.StatusEnum;
 import com.example.rabbitproject.domain.User;
 
 public final class UserBuilder {
@@ -31,6 +32,11 @@ public final class UserBuilder {
 
     public UserBuilder integrationId (String integrationId) {
         user.setIntegrationId(integrationId);
+        return this;
+    }
+
+    public UserBuilder status (StatusEnum status) {
+        user.setStatus(status);
         return this;
     }
 
