@@ -14,10 +14,10 @@ import org.springframework.web.client.RestTemplate;
 @EnableRabbit
 @SpringBootApplication
 @EntityScan(basePackages = {
-    "com.example.rabbitproject.domain"
+    "com.example.springbootpostgresql.domain"
 })
 @EnableJpaRepositories(basePackages = {
-    "com.example.rabbitproject.repository"
+    "com.example.springbootpostgresql.repository"
 })
 public class SpringBootPostgresqlApplication {
 
