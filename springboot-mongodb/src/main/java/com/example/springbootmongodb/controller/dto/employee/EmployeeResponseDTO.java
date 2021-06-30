@@ -1,14 +1,15 @@
-package com.example.springbootmongodb.controller.dto;
+package com.example.springbootmongodb.controller.dto.employee;
 
 import java.io.Serializable;
 
-public class UserResponseDTO implements Serializable {
+public class EmployeeResponseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String id;
     private String name;
     private String address;
-    private String status;
+    private String bossId;
+    private EmployeeResponseDTO boss;
 
     public String getId() {
         return id;
@@ -34,21 +35,29 @@ public class UserResponseDTO implements Serializable {
         this.address = address;
     }
 
-    public String getStatus() {
-        return status;
+    public String getBossId() {
+        return bossId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setBossId(String bossId) {
+        this.bossId = bossId;
+    }
+
+    public EmployeeResponseDTO getBoss() {
+        return boss;
+    }
+
+    public void setBoss(EmployeeResponseDTO boss) {
+        this.boss = boss;
     }
 
     @Override
     public String toString() {
-        return "UserResponseDTO{" +
+        return "EmployeeResponseDTO{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", status='" + status + '\'' +
+                ", bossId='" + bossId + '\'' +
             '}';
     }
 }

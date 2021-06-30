@@ -4,20 +4,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class UserNotFoundException  extends RuntimeException {
-    public UserNotFoundException() {
+public class EmployeeNotFoundException extends RuntimeException {
+    public EmployeeNotFoundException() {
         super();
     }
-    public UserNotFoundException(String message, Throwable cause) {
+    public EmployeeNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
-    public UserNotFoundException(String message, String ... params) {
+    public EmployeeNotFoundException(String message, String ... params) {
         super(String.format(message, params));
     }
-    public UserNotFoundException(String message) {
+    public EmployeeNotFoundException(String message) {
         super(message);
     }
-    public UserNotFoundException(Throwable cause) {
+    public EmployeeNotFoundException(Throwable cause) {
         super(cause);
     }
 }

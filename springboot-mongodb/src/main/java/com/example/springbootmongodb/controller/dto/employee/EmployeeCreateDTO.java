@@ -1,8 +1,8 @@
-package com.example.springbootmongodb.controller.dto;
+package com.example.springbootmongodb.controller.dto.employee;
 
 import java.io.Serializable;
 
-public class UserUpdateDTO implements Serializable {
+public class EmployeeCreateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String name;
@@ -26,9 +26,9 @@ public class UserUpdateDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "UserUpdateDTO{" +
-            "name='" + name + '\'' +
-            ", address='" + address + '\'' +
+        return "EmployeeCreateDTO{" +
+                "name='" + name + '\'' +
+                ", address='" + address + '\'' +
             '}';
     }
 }
