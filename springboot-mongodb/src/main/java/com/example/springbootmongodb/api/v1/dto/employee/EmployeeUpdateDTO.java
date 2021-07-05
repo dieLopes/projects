@@ -1,4 +1,4 @@
-package com.example.springbootmongodb.controller.dto.employee;
+package com.example.springbootmongodb.api.v1.dto.employee;
 
 import java.io.Serializable;
 
@@ -7,7 +7,6 @@ public class EmployeeUpdateDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private String name;
     private String address;
-    private String bossId;
 
     public String getName() {
         return name;
@@ -25,20 +24,38 @@ public class EmployeeUpdateDTO implements Serializable {
         this.address = address;
     }
 
-    public String getBossId() {
-        return bossId;
-    }
-
-    public void setBossId(String bossId) {
-        this.bossId = bossId;
-    }
-
     @Override
     public String toString() {
         return "EmployeeUpdateDTO{" +
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", bossId='" + bossId + '\'' +
             '}';
+    }
+
+    public static class Builder {
+
+        private EmployeeUpdateDTO employee;
+
+        private Builder() {
+            employee = new EmployeeUpdateDTO();
+        }
+
+        public static Builder of () {
+            return new Builder();
+        }
+
+        public Builder name (String name) {
+            employee.setName(name);
+            return this;
+        }
+
+        public Builder address (String address) {
+            employee.setAddress(address);
+            return this;
+        }
+
+        public EmployeeUpdateDTO build () {
+            return employee;
+        }
     }
 }

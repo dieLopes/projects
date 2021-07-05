@@ -1,10 +1,12 @@
-package com.example.springbootmongodb.controller.dto.employee;
+package com.example.springbootmongodb.api.v1.dto.employee;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeResponseListDTO {
+public class EmployeeResponseListDTO implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private List<EmployeeResponseDTO> employees = new ArrayList<>();
 
     public EmployeeResponseListDTO() { }

@@ -1,8 +1,9 @@
-package com.example.springbootmongodb.mapper;
+package com.example.springbootmongodb.api.v1.mapper;
 
-import com.example.springbootmongodb.controller.dto.employee.EmployeeCreateDTO;
-import com.example.springbootmongodb.controller.dto.employee.EmployeeResponseDTO;
-import com.example.springbootmongodb.controller.dto.employee.EmployeeUpdateDTO;
+import com.example.springbootmongodb.api.v1.dto.employee.EmployeeCreateDTO;
+import com.example.springbootmongodb.api.v1.dto.employee.EmployeeResponseDTO;
+import com.example.springbootmongodb.api.v1.dto.employee.EmployeeUpdateDTO;
+import com.example.springbootmongodb.builder.TenantBuilder;
 import com.example.springbootmongodb.domain.Employee;
 import org.modelmapper.ModelMapper;
 
@@ -14,7 +15,9 @@ public class EmployeeMapper {
     private static final ModelMapper mapper = new ModelMapper();
 
     public static Employee createDtoToEntity(EmployeeCreateDTO employeeCreateDTO) {
-        return mapper.map(employeeCreateDTO, Employee.class);
+        Employee employee = mapper.map(employeeCreateDTO, Employee.class);
+        employee.setTenant(TenantBuilder.of().id(employeeCreateDTO.getTenantId()).build());
+        return employee;
     }
 
     public static Employee updateDtoToEntity (EmployeeUpdateDTO employeeUpdateDTO) {
@@ -22,7 +25,9 @@ public class EmployeeMapper {
     }
 
     public static EmployeeResponseDTO entityToDTO(Employee employee) {
-        return mapper.map(employee, EmployeeResponseDTO.class);
+        EmployeeResponseDTO employeeResponseDTO = mapper.map(employee, EmployeeResponseDTO.class);
+        employeeResponseDTO.setTenant(TenantMapper.entityToDTO(employee.getTenant()));
+        return employeeResponseDTO;
     }
 
     public static List<EmployeeResponseDTO> entitiesToDTOs (List<Employee> employees) {

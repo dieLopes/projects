@@ -1,9 +1,10 @@
-package com.example.springbootmongodb.mapper;
+package com.example.springbootmongodb.api.v1.mapper;
 
 import com.example.springbootmongodb.builder.EmployeeBuilder;
-import com.example.springbootmongodb.controller.dto.employee.EmployeeCreateDTO;
-import com.example.springbootmongodb.controller.dto.employee.EmployeeResponseDTO;
-import com.example.springbootmongodb.controller.dto.employee.EmployeeUpdateDTO;
+import com.example.springbootmongodb.api.v1.dto.employee.EmployeeCreateDTO;
+import com.example.springbootmongodb.api.v1.dto.employee.EmployeeResponseDTO;
+import com.example.springbootmongodb.api.v1.dto.employee.EmployeeUpdateDTO;
+import com.example.springbootmongodb.builder.TenantBuilder;
 import com.example.springbootmongodb.domain.Employee;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,11 +46,15 @@ public class EmployeeMapperTest {
                 .id("some-id")
                 .name("Some Name")
                 .address("Some Address")
+                .tenant(TenantBuilder.of()
+                        .id("some-tenant-id")
+                        .build())
                 .build();
         EmployeeResponseDTO employeeResponseDTO = EmployeeMapper.entityToDTO(employee);
         assertThat(employeeResponseDTO.getId()).isEqualTo(employee.getId());
         assertThat(employeeResponseDTO.getName()).isEqualTo(employee.getName());
         assertThat(employeeResponseDTO.getAddress()).isEqualTo(employee.getAddress());
+        assertThat(employeeResponseDTO.getTenant().getId()).isEqualTo("some-tenant-id");
     }
 
     @Test
@@ -59,11 +64,17 @@ public class EmployeeMapperTest {
                     .id("some-id")
                     .name("Some Name")
                     .address("Some Address")
+                    .tenant(TenantBuilder.of()
+                            .id("some-tenant-id-1")
+                            .build())
                     .build(),
             EmployeeBuilder.of()
                     .id("another-id")
                     .name("Another Name")
                     .address("Another Address")
+                    .tenant(TenantBuilder.of()
+                            .id("some-tenant-id-2")
+                            .build())
                     .build());
         List<EmployeeResponseDTO> employeeResponseDTOS = EmployeeMapper.entitiesToDTOs(employees);
         assertThat(employeeResponseDTOS).hasSize(2)

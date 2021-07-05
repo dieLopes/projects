@@ -1,4 +1,6 @@
-package com.example.springbootmongodb.controller.dto.employee;
+package com.example.springbootmongodb.api.v1.dto.employee;
+
+import com.example.springbootmongodb.api.v1.dto.tenant.TenantResponseDTO;
 
 import java.io.Serializable;
 
@@ -8,8 +10,7 @@ public class EmployeeResponseDTO implements Serializable {
     private String id;
     private String name;
     private String address;
-    private String bossId;
-    private EmployeeResponseDTO boss;
+    private TenantResponseDTO tenant;
 
     public String getId() {
         return id;
@@ -35,20 +36,12 @@ public class EmployeeResponseDTO implements Serializable {
         this.address = address;
     }
 
-    public String getBossId() {
-        return bossId;
+    public TenantResponseDTO getTenant() {
+        return tenant;
     }
 
-    public void setBossId(String bossId) {
-        this.bossId = bossId;
-    }
-
-    public EmployeeResponseDTO getBoss() {
-        return boss;
-    }
-
-    public void setBoss(EmployeeResponseDTO boss) {
-        this.boss = boss;
+    public void setTenant(TenantResponseDTO tenant) {
+        this.tenant = tenant;
     }
 
     @Override
@@ -57,7 +50,6 @@ public class EmployeeResponseDTO implements Serializable {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", bossId='" + bossId + '\'' +
             '}';
     }
 }

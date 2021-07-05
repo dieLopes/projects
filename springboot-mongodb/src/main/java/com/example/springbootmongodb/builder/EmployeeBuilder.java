@@ -1,6 +1,7 @@
 package com.example.springbootmongodb.builder;
 
 import com.example.springbootmongodb.domain.Employee;
+import com.example.springbootmongodb.domain.Tenant;
 
 public final class EmployeeBuilder {
 
@@ -26,6 +27,11 @@ public final class EmployeeBuilder {
 
     public EmployeeBuilder address (String address) {
         employee.setAddress(address);
+        return this;
+    }
+
+    public EmployeeBuilder tenant (Tenant tenant) {
+        employee.setTenant(tenant);
         return this;
     }
 
