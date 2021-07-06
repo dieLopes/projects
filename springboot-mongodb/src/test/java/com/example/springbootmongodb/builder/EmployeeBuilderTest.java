@@ -16,9 +16,13 @@ public class EmployeeBuilderTest {
                 .id("some-id")
                 .name("Some Name")
                 .address("Some Address")
+                .tenant(TenantBuilder.of()
+                        .id("some-tenant-id")
+                        .build())
                 .build();
         assertThat(employee.getId()).isEqualTo("some-id");
         assertThat(employee.getName()).isEqualTo("Some Name");
         assertThat(employee.getAddress()).isEqualTo("Some Address");
+        assertThat(employee.getTenant().getId()).isEqualTo("some-tenant-id");
     }
 }

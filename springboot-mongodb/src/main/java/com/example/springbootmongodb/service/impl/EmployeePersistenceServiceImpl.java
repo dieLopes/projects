@@ -32,9 +32,12 @@ public class EmployeePersistenceServiceImpl implements EmployeePersistenceServic
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Employee save(Employee employee) {
+        if (employee.getId() != null) {
+            throw new EmployeeBadRequestException("Employee id must be null");
+        }
         Tenant tenant;
         try {
-            tenant = tenantSearchService.findById(employee.getId());
+            tenant = tenantSearchService.findById(employee.getTenant().getId());
         } catch (TenantNotFoundException e) {
             throw new EmployeeBadRequestException("Tenant not found");
         }
