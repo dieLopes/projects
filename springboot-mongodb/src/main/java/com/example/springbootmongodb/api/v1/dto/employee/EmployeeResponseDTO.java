@@ -1,15 +1,22 @@
 package com.example.springbootmongodb.api.v1.dto.employee;
 
 import com.example.springbootmongodb.api.v1.dto.tenant.TenantResponseDTO;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
+@ApiModel(value = "EmployeeResponse")
 public class EmployeeResponseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @ApiModelProperty("Employee id")
     private String id;
+    @ApiModelProperty("Employee name")
     private String name;
+    @ApiModelProperty("Employee address")
     private String address;
+    @ApiModelProperty("Employee tenant")
     private TenantResponseDTO tenant;
 
     public String getId() {

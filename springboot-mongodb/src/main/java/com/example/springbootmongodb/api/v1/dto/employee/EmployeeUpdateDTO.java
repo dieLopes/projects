@@ -1,11 +1,17 @@
 package com.example.springbootmongodb.api.v1.dto.employee;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
+@ApiModel(value = "EmployeeUpdate")
 public class EmployeeUpdateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @ApiModelProperty(value = "Employee name")
     private String name;
+    @ApiModelProperty(value = "Employee address")
     private String address;
 
     public String getName() {
