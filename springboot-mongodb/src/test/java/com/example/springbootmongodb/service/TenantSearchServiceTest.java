@@ -4,7 +4,6 @@ import com.example.springbootmongodb.builder.TenantBuilder;
 import com.example.springbootmongodb.domain.Tenant;
 import com.example.springbootmongodb.exception.TenantNotFoundException;
 import com.example.springbootmongodb.repository.TenantRepository;
-import com.example.springbootmongodb.service.impl.TenantSearchServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -24,10 +23,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TenantSearchServiceImplTest {
+public class TenantSearchServiceTest {
 
     @InjectMocks
-    private TenantSearchServiceImpl tenantSearchService;
+    private TenantSearchService tenantSearchService;
     @Mock
     private TenantRepository tenantRepository;
 

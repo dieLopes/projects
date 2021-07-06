@@ -5,8 +5,6 @@ import com.example.springbootmongodb.domain.Tenant;
 import com.example.springbootmongodb.exception.TenantBadRequestException;
 import com.example.springbootmongodb.exception.TenantNotFoundException;
 import com.example.springbootmongodb.repository.TenantRepository;
-import com.example.springbootmongodb.service.impl.TenantPersistenceServiceImpl;
-import com.example.springbootmongodb.service.impl.TenantSearchServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -22,14 +20,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TenantPersistenceServiceImplTest {
+public class TenantPersistenceServiceTest {
 
     @InjectMocks
-    private TenantPersistenceServiceImpl tenantPersistenceService;
+    private TenantPersistenceService tenantPersistenceService;
     @Mock
     private TenantRepository tenantRepository;
     @Mock
-    private TenantSearchServiceImpl tenantSearchService;
+    private TenantSearchService tenantSearchService;
 
     @Test
     public void whenCreateTenantThenSaveTenant () {

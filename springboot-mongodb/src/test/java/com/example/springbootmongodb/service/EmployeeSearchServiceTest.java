@@ -5,7 +5,6 @@ import com.example.springbootmongodb.builder.TenantBuilder;
 import com.example.springbootmongodb.domain.Employee;
 import com.example.springbootmongodb.exception.EmployeeNotFoundException;
 import com.example.springbootmongodb.repository.EmployeeRepository;
-import com.example.springbootmongodb.service.impl.EmployeeSearchServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,10 +24,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EmployeeSearchServiceImplTest {
+public class EmployeeSearchServiceTest {
 
     @InjectMocks
-    private EmployeeSearchServiceImpl employeeSearchService;
+    private EmployeeSearchService employeeSearchService;
     @Mock
     private EmployeeRepository employeeRepository;
 

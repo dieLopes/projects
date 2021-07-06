@@ -12,7 +12,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -29,8 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ApiPath.API_PATH + "tenants")
 public class TenantController {
 
-    private TenantPersistenceService tenantPersistenceService;
-    private TenantSearchService tenantSearchService;
+    private final TenantPersistenceService tenantPersistenceService;
+    private final TenantSearchService tenantSearchService;
 
     public TenantController(TenantPersistenceService tenantPersistenceService,
                             TenantSearchService tenantSearchService) {

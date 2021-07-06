@@ -7,9 +7,6 @@ import com.example.springbootmongodb.domain.Tenant;
 import com.example.springbootmongodb.exception.EmployeeBadRequestException;
 import com.example.springbootmongodb.exception.EmployeeNotFoundException;
 import com.example.springbootmongodb.repository.EmployeeRepository;
-import com.example.springbootmongodb.service.impl.EmployeePersistenceServiceImpl;
-import com.example.springbootmongodb.service.impl.EmployeeSearchServiceImpl;
-import com.example.springbootmongodb.service.impl.TenantSearchServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,16 +22,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EmployeePersistenceServiceImplTest {
+public class EmployeePersistenceServiceTest {
 
     @InjectMocks
-    private EmployeePersistenceServiceImpl employeePersistenceService;
+    private EmployeePersistenceService employeePersistenceService;
     @Mock
     private EmployeeRepository employeeRepository;
     @Mock
-    private EmployeeSearchServiceImpl employeeSearchService;
+    private EmployeeSearchService employeeSearchService;
     @Mock
-    private TenantSearchServiceImpl tenantSearchService;
+    private TenantSearchService tenantSearchService;
 
     @Test
     public void whenCreateEmployeeThenSaveEmployee () {

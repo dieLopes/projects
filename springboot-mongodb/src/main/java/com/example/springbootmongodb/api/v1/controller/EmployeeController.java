@@ -29,8 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ApiPath.API_PATH + "employees")
 public class EmployeeController {
 
-    private EmployeePersistenceService employeePersistenceService;
-    private EmployeeSearchService employeeSearchService;
+    private final EmployeePersistenceService employeePersistenceService;
+    private final EmployeeSearchService employeeSearchService;
 
     public EmployeeController(EmployeePersistenceService employeePersistenceService,
                               EmployeeSearchService employeeSearchService) {
