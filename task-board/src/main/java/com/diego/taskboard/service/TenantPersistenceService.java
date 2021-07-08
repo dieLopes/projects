@@ -23,9 +23,6 @@ public class TenantPersistenceService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Tenant save(Tenant tenant) {
-        if (tenant.getId() != null) {
-            throw new TenantBadRequestException("Tenant id must be null");
-        }
         validateTenant(tenant);
         tenant.setId(UUID.randomUUID().toString());
         return tenantRepository.save(tenant);

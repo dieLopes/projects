@@ -45,16 +45,6 @@ public class EmployeePersistenceServiceTest {
     }
 
     @Test
-    public void whenCreateEmployeeWithIdThenReturnException () {
-        Employee employee = buildEmployee();
-        assertThatThrownBy(() -> employeePersistenceService.save(employee))
-                .isInstanceOf(EmployeeBadRequestException.class)
-                .hasMessage("Employee id must be null");
-        verify(employeeRepository, never()).save(any(Employee.class));
-        verify(tenantSearchService, never()).findById(anyString());
-    }
-
-    @Test
     public void whenCreateEmployeeWithoutNameThenReturnException () {
         Employee employee = buildEmployee();
         employee.setName(null);

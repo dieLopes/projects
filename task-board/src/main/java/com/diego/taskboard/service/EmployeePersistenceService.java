@@ -28,9 +28,6 @@ public class EmployeePersistenceService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Employee save(Employee employee) {
-        if (employee.getId() != null) {
-            throw new EmployeeBadRequestException("Employee id must be null");
-        }
         Tenant tenant;
         try {
             tenant = tenantSearchService.findById(employee.getTenant().getId());

@@ -39,16 +39,6 @@ public class TenantPersistenceServiceTest {
     }
 
     @Test
-    public void whenCreateTenantWithIdThenReturnException () {
-        Tenant tenant = buildTenant();
-        assertThatThrownBy(() -> tenantPersistenceService.save(tenant))
-                .isInstanceOf(TenantBadRequestException.class)
-                .hasMessage("Tenant id must be null");
-        verify(tenantRepository, never()).save(any(Tenant.class));
-        verify(tenantSearchService, never()).findById(anyString());
-    }
-
-    @Test
     public void whenCreateTenantWithoutNameThenReturnException () {
         Tenant tenant = buildTenant();
         tenant.setName(null);
