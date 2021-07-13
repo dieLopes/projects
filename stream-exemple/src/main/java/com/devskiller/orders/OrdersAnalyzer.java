@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -29,13 +30,12 @@ public class OrdersAnalyzer {
      * @return list with up to three most popular products
      */
     public List<Product> findThreeMostPopularProducts(Stream<Order> orders) {
-        Map<Product, Long> result = orders
+        return orders
                 .flatMap(order -> order.getOrderLines().stream())
                 .flatMap(orderLine -> Stream.of(orderLine.getProduct()))
                 .collect(Collectors.toList())
                 .stream()
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-        return result
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .keySet()
                 .stream()
                 .sorted(Comparator.comparing(Product::getName))
@@ -63,9 +63,10 @@ public class OrdersAnalyzer {
                 result.put(order.getCustomer(), totalLinesForOrder);
             }
         });
-        return Optional.of(result.entrySet()
+        return Optional.of(Objects.requireNonNull(result.entrySet()
                 .stream()
                 .max(Map.Entry.comparingByValue())
-                .get().getKey());
+                .orElse(null))
+                .getKey());
     }
 }
