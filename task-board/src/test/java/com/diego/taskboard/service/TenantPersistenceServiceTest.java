@@ -2,21 +2,24 @@ package com.diego.taskboard.service;
 
 import com.diego.taskboard.builder.TenantBuilder;
 import com.diego.taskboard.domain.Tenant;
-import com.diego.taskboard.exception.TenantBadRequestException;
 import com.diego.taskboard.exception.TenantNotFoundException;
 import com.diego.taskboard.repository.TenantRepository;
+import com.diego.taskboard.validator.IValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -28,6 +31,8 @@ public class TenantPersistenceServiceTest {
     private TenantRepository tenantRepository;
     @Mock
     private TenantSearchService tenantSearchService;
+    @Mock
+    private List<IValidator<Tenant>> validators;
 
     @Test
     public void whenCreateTenantThenSaveTenant () {
@@ -36,17 +41,7 @@ public class TenantPersistenceServiceTest {
         when(tenantRepository.save(eq(tenant))).thenReturn(tenant);
         tenantPersistenceService.save(tenant);
         verify(tenantRepository).save(any(Tenant.class));
-    }
-
-    @Test
-    public void whenCreateTenantWithoutNameThenReturnException () {
-        Tenant tenant = buildTenant();
-        tenant.setName(null);
-        tenant.setId(null);
-        assertThatThrownBy(() -> tenantPersistenceService.save(tenant))
-                .isInstanceOf(TenantBadRequestException.class)
-                .hasMessage("Name is a mandatory field");
-        verify(tenantRepository, never()).save(any(Tenant.class));
+        verify(validators).forEach(any(Consumer.class));
     }
 
     @Test
@@ -55,6 +50,7 @@ public class TenantPersistenceServiceTest {
         when(tenantRepository.save(eq(tenant))).thenReturn(tenant);
         tenantPersistenceService.update(tenant.getId(), tenant);
         verify(tenantRepository).save(any(Tenant.class));
+        verify(validators).forEach(any(Consumer.class));
     }
 
     @Test
@@ -68,6 +64,7 @@ public class TenantPersistenceServiceTest {
                 .hasMessage("Tenant not found");
         verify(tenantSearchService).findById(eq(tenant.getId()));
         verify(tenantRepository, never()).save(any(Tenant.class));
+        verifyNoInteractions(validators);
     }
 
     @Test
@@ -80,17 +77,7 @@ public class TenantPersistenceServiceTest {
                 .hasMessage("Tenant not found");
         verify(tenantSearchService).findById(eq(tenant.getId()));
         verify(tenantRepository, never()).save(any(Tenant.class));
-    }
-
-    @Test
-    public void whenUpdateTenantWithoutNameThenReturnException () {
-        Tenant tenant = buildTenant();
-        tenant.setName(null);
-        assertThatThrownBy(() -> tenantPersistenceService.update(tenant.getId(), tenant))
-                .isInstanceOf(TenantBadRequestException.class)
-                .hasMessage("Name is a mandatory field");
-        verify(tenantRepository, never()).save(any(Tenant.class));
-        verify(tenantSearchService).findById(anyString());
+        verifyNoInteractions(validators);
     }
 
     private Tenant buildTenant () {

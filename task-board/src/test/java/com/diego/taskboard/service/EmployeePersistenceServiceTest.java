@@ -4,21 +4,24 @@ import com.diego.taskboard.builder.EmployeeBuilder;
 import com.diego.taskboard.builder.TenantBuilder;
 import com.diego.taskboard.domain.Employee;
 import com.diego.taskboard.domain.Tenant;
-import com.diego.taskboard.exception.EmployeeBadRequestException;
 import com.diego.taskboard.exception.EmployeeNotFoundException;
 import com.diego.taskboard.repository.EmployeeRepository;
+import com.diego.taskboard.validator.IValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,6 +35,8 @@ public class EmployeePersistenceServiceTest {
     private EmployeeSearchService employeeSearchService;
     @Mock
     private TenantSearchService tenantSearchService;
+    @Mock
+    private List<IValidator<Employee>> validators;
 
     @Test
     public void whenCreateEmployeeThenSaveEmployee () {
@@ -42,30 +47,7 @@ public class EmployeePersistenceServiceTest {
         employeePersistenceService.save(employee);
         verify(employeeRepository).save(any(Employee.class));
         verify(tenantSearchService).findById(eq("some-tenant-id"));
-    }
-
-    @Test
-    public void whenCreateEmployeeWithoutNameThenReturnException () {
-        Employee employee = buildEmployee();
-        employee.setName(null);
-        employee.setId(null);
-        assertThatThrownBy(() -> employeePersistenceService.save(employee))
-                .isInstanceOf(EmployeeBadRequestException.class)
-                .hasMessage("Name is a mandatory field");
-        verify(employeeRepository, never()).save(any(Employee.class));
-        verify(tenantSearchService).findById(anyString());
-    }
-
-    @Test
-    public void whenCreateEmployeeWithoutAddressThenReturnException () {
-        Employee employee = buildEmployee();
-        employee.setAddress(null);
-        employee.setId(null);
-        assertThatThrownBy(() -> employeePersistenceService.save(employee))
-                .isInstanceOf(EmployeeBadRequestException.class)
-                .hasMessage("Address is a mandatory field");
-        verify(employeeRepository, never()).save(any(Employee.class));
-        verify(tenantSearchService).findById(anyString());
+        verify(validators).forEach(any(Consumer.class));
     }
 
     @Test
@@ -76,6 +58,7 @@ public class EmployeePersistenceServiceTest {
         employeePersistenceService.update(employee.getId(), employee);
         verify(employeeRepository).save(any(Employee.class));
         verify(employeeSearchService).findById(eq(employee.getId()));
+        verify(validators).forEach(any(Consumer.class));
     }
 
     @Test
@@ -89,6 +72,7 @@ public class EmployeePersistenceServiceTest {
                 .hasMessage("Employee not found");
         verify(employeeSearchService).findById(eq(employee.getId()));
         verify(employeeRepository, never()).save(any(Employee.class));
+        verifyNoInteractions(validators);
     }
 
     @Test
@@ -101,26 +85,7 @@ public class EmployeePersistenceServiceTest {
                 .hasMessage("Employee not found");
         verify(employeeSearchService).findById(eq(employee.getId()));
         verify(employeeRepository, never()).save(any(Employee.class));
-    }
-
-    @Test
-    public void whenUpdateEmployeeWithoutNameThenReturnException () {
-        Employee employee = buildEmployee();
-        employee.setName(null);
-        assertThatThrownBy(() -> employeePersistenceService.update(employee.getId(), employee))
-                .isInstanceOf(EmployeeBadRequestException.class)
-                .hasMessage("Name is a mandatory field");
-        verify(employeeRepository, never()).save(any(Employee.class));
-    }
-
-    @Test
-    public void whenUpdateEmployeeWithoutAddressThenReturnException () {
-        Employee employee = buildEmployee();
-        employee.setAddress(null);
-        assertThatThrownBy(() -> employeePersistenceService.update(employee.getId(), employee))
-                .isInstanceOf(EmployeeBadRequestException.class)
-                .hasMessage("Address is a mandatory field");
-        verify(employeeRepository, never()).save(any(Employee.class));
+        verifyNoInteractions(validators);
     }
 
     @Test
