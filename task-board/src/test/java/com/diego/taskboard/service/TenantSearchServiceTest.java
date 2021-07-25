@@ -2,7 +2,7 @@ package com.diego.taskboard.service;
 
 import com.diego.taskboard.builder.TenantBuilder;
 import com.diego.taskboard.domain.Tenant;
-import com.diego.taskboard.exception.TenantNotFoundException;
+import com.diego.taskboard.exception.NotFoundException;
 import com.diego.taskboard.repository.TenantRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +31,7 @@ public class TenantSearchServiceTest {
     private TenantRepository tenantRepository;
 
     @Test
-    public void whenFindTenantByIdThenReturnTenant () throws TenantNotFoundException {
+    public void whenFindTenantByIdThenReturnTenant () throws NotFoundException {
         Tenant tenant = buildTenant("some-id", "Some Name");
         when(tenantRepository.findById(eq(tenant.getId()))).thenReturn(Optional.of(tenant));
         assertThat(tenantSearchService.findById(tenant.getId())).satisfies(findTenant -> {
@@ -45,7 +45,7 @@ public class TenantSearchServiceTest {
     public void whenFindTenantByIdButNotFoundThenReturnException () {
         when(tenantRepository.findById(anyString())).thenReturn(Optional.empty());
         assertThatThrownBy(() -> tenantSearchService.findById("some-id"))
-                .isInstanceOf(TenantNotFoundException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("Tenant not found");
         verify(tenantRepository).findById(anyString());
     }
@@ -53,7 +53,7 @@ public class TenantSearchServiceTest {
     @Test
     public void whenFindTenantByIdButIdIsNullThenReturnException () {
         assertThatThrownBy(() -> tenantSearchService.findById(null))
-                .isInstanceOf(TenantNotFoundException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("Tenant not found");
         verify(tenantRepository, never()).findById(anyString());
     }

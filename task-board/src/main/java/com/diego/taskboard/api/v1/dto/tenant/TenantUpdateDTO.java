@@ -22,7 +22,7 @@ public class TenantUpdateDTO implements Serializable {
 
     public static class Builder {
 
-        private TenantUpdateDTO tenant;
+        private final TenantUpdateDTO tenant;
 
         private Builder() {
             tenant = new TenantUpdateDTO();
@@ -33,7 +33,7 @@ public class TenantUpdateDTO implements Serializable {
         }
 
         public Builder name (String name) {
-            tenant.setName(name);
+            tenant.name = name;
             return this;
         }
 

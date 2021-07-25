@@ -2,7 +2,7 @@ package com.diego.taskboard.service;
 
 import com.diego.taskboard.builder.TenantBuilder;
 import com.diego.taskboard.domain.Tenant;
-import com.diego.taskboard.exception.TenantNotFoundException;
+import com.diego.taskboard.exception.NotFoundException;
 import com.diego.taskboard.repository.TenantRepository;
 import com.diego.taskboard.validator.IValidator;
 import org.junit.Test;
@@ -58,9 +58,9 @@ public class TenantPersistenceServiceTest {
         Tenant tenant = buildTenant();
         tenant.setId(null);
         when(tenantSearchService.findById(eq(null)))
-                .thenThrow(new TenantNotFoundException("Tenant not found"));
+                .thenThrow(new NotFoundException("Tenant not found"));
         assertThatThrownBy(() ->  tenantPersistenceService.update(tenant.getId(), tenant))
-                .isInstanceOf(TenantNotFoundException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("Tenant not found");
         verify(tenantSearchService).findById(eq(tenant.getId()));
         verify(tenantRepository, never()).save(any(Tenant.class));
@@ -71,9 +71,9 @@ public class TenantPersistenceServiceTest {
     public void whenUpdateTenantNotFoundThenReturnException () {
         Tenant tenant = buildTenant();
         when(tenantSearchService.findById(eq(tenant.getId())))
-                .thenThrow(new TenantNotFoundException("Tenant not found"));
+                .thenThrow(new NotFoundException("Tenant not found"));
         assertThatThrownBy(() -> tenantPersistenceService.update(tenant.getId(), tenant))
-                .isInstanceOf(TenantNotFoundException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("Tenant not found");
         verify(tenantSearchService).findById(eq(tenant.getId()));
         verify(tenantRepository, never()).save(any(Tenant.class));

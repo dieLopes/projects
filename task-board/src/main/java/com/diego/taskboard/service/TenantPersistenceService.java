@@ -1,7 +1,6 @@
 package com.diego.taskboard.service;
 
 import com.diego.taskboard.domain.Tenant;
-import com.diego.taskboard.exception.TenantBadRequestException;
 import com.diego.taskboard.repository.TenantRepository;
 import com.diego.taskboard.validator.IValidator;
 import org.springframework.stereotype.Service;
@@ -18,11 +17,11 @@ public class TenantPersistenceService {
     private final TenantSearchService tenantSearchService;
     private final List<IValidator<Tenant>> validators;
 
-    public TenantPersistenceService(TenantRepository employeeRepository,
-                                    TenantSearchService employeeSearchService,
+    public TenantPersistenceService(TenantRepository tenantRepository,
+                                    TenantSearchService tenantSearchService,
                                     List<IValidator<Tenant>> validators) {
-        this.tenantRepository = employeeRepository;
-        this.tenantSearchService = employeeSearchService;
+        this.tenantRepository = tenantRepository;
+        this.tenantSearchService = tenantSearchService;
         this.validators = validators;
     }
 

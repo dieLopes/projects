@@ -1,22 +1,27 @@
-package com.diego.taskboard.api.v1.dto.employee;
+package com.diego.taskboard.api.v1.dto.user;
 
+import com.diego.taskboard.api.v1.dto.contact.ContactDTO;
 import com.diego.taskboard.api.v1.dto.tenant.TenantResponseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
-@ApiModel(value = "EmployeeResponse")
-public class EmployeeResponseDTO implements Serializable {
+@ApiModel(value = "UserResponse")
+public class UserResponseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty("Employee id")
+    @ApiModelProperty("User id")
     private String id;
-    @ApiModelProperty("Employee name")
+    @ApiModelProperty("User name")
     private String name;
-    @ApiModelProperty("Employee address")
+    @ApiModelProperty("User address")
     private String address;
-    @ApiModelProperty("Employee tenant")
+    @ApiModelProperty("User contacts")
+    private Set<ContactDTO> contacts = new HashSet<>();
+    @ApiModelProperty("User tenant")
     private TenantResponseDTO tenant;
 
     public String getId() {
@@ -43,6 +48,14 @@ public class EmployeeResponseDTO implements Serializable {
         this.address = address;
     }
 
+    public Set<ContactDTO> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Set<ContactDTO> contacts) {
+        this.contacts = contacts;
+    }
+
     public TenantResponseDTO getTenant() {
         return tenant;
     }
@@ -53,7 +66,7 @@ public class EmployeeResponseDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "EmployeeResponseDTO{" +
+        return "UserResponseDTO{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +

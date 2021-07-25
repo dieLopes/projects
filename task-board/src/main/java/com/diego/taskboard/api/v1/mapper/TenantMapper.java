@@ -17,8 +17,8 @@ public class TenantMapper {
         return mapper.map(tenantCreateDTO, Tenant.class);
     }
 
-    public static Tenant updateDtoToEntity (TenantUpdateDTO employeeUpdateDTO) {
-        return mapper.map(employeeUpdateDTO, Tenant.class);
+    public static Tenant updateDtoToEntity (TenantUpdateDTO tenantUpdateDTO) {
+        return mapper.map(tenantUpdateDTO, Tenant.class);
     }
 
     public static TenantResponseDTO entityToDTO(Tenant tenant) {

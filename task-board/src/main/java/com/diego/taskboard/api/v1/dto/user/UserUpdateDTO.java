@@ -1,20 +1,23 @@
-package com.diego.taskboard.api.v1.dto.employee;
+package com.diego.taskboard.api.v1.dto.user;
 
+import com.diego.taskboard.api.v1.dto.contact.ContactDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
-@ApiModel(value = "EmployeeCreate")
-public class EmployeeCreateDTO implements Serializable {
+@ApiModel(value = "UserUpdate")
+public class UserUpdateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty(value = "Employee name", required = true)
+    @ApiModelProperty(value = "User name")
     private String name;
-    @ApiModelProperty(value = "Employee address", required = true)
+    @ApiModelProperty(value = "User address")
     private String address;
-    @ApiModelProperty(value = "Employee tenant id", required = true)
-    private String tenantId;
+    @ApiModelProperty("User contacts")
+    private Set<ContactDTO> contacts = new HashSet<>();
 
     public String getName() {
         return name;
@@ -32,29 +35,28 @@ public class EmployeeCreateDTO implements Serializable {
         this.address = address;
     }
 
-    public String getTenantId() {
-        return tenantId;
+    public Set<ContactDTO> getContacts() {
+        return contacts;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public void setContacts(Set<ContactDTO> contacts) {
+        this.contacts = contacts;
     }
 
     @Override
     public String toString() {
-        return "EmployeeCreateDTO{" +
+        return "UserUpdateDTO{" +
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", tenantId='" + tenantId + '\'' +
             '}';
     }
 
     public static class Builder {
 
-        private EmployeeCreateDTO employee;
+        private final UserUpdateDTO user;
 
         private Builder() {
-            employee = new EmployeeCreateDTO();
+            user = new UserUpdateDTO();
         }
 
         public static Builder of () {
@@ -62,22 +64,17 @@ public class EmployeeCreateDTO implements Serializable {
         }
 
         public Builder name (String name) {
-            employee.setName(name);
+            user.name = name;
             return this;
         }
 
         public Builder address (String address) {
-            employee.setAddress(address);
+            user.address = address;
             return this;
         }
 
-        public Builder tenantId (String tenantId) {
-            employee.setTenantId(tenantId);
-            return this;
-        }
-
-        public EmployeeCreateDTO build () {
-            return employee;
+        public UserUpdateDTO build () {
+            return user;
         }
     }
 }

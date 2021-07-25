@@ -1,16 +1,16 @@
-package com.diego.taskboard.validator.tenant;
+package com.diego.taskboard.validator.user;
 
-import com.diego.taskboard.domain.Tenant;
+import com.diego.taskboard.domain.User;
 import com.diego.taskboard.exception.BadRequestException;
 import com.diego.taskboard.validator.IValidator;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TenantNameValidator implements IValidator<Tenant> {
+public class UserNameValidator implements IValidator<User> {
 
     @Override
-    public void validate(Tenant tenant) {
-        if (tenant.getName() == null || tenant.getName().isEmpty()) {
+    public void validate(User user) {
+        if (user.getName() == null || user.getName().isEmpty()) {
             throw new BadRequestException("Name is a mandatory field");
         }
     }

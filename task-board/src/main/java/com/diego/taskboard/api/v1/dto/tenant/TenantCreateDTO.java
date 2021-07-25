@@ -29,7 +29,7 @@ public class TenantCreateDTO implements Serializable {
 
     public static class Builder {
 
-        private TenantCreateDTO tenant;
+        private final TenantCreateDTO tenant;
 
         private Builder() {
             tenant = new TenantCreateDTO();
@@ -40,7 +40,7 @@ public class TenantCreateDTO implements Serializable {
         }
 
         public Builder name (String name) {
-            tenant.setName(name);
+            tenant.name = name;
             return this;
         }
 

@@ -1,14 +1,13 @@
 package com.diego.taskboard.api.v1.controller;
 
-import com.diego.taskboard.api.v1.dto.employee.EmployeeResponseDTO;
-import com.diego.taskboard.api.v1.dto.employee.EmployeeResponseListDTO;
-import com.diego.taskboard.api.v1.dto.employee.EmployeeCreateDTO;
-import com.diego.taskboard.api.v1.dto.employee.EmployeeUpdateDTO;
 import com.diego.taskboard.api.v1.dto.tenant.TenantCreateDTO;
 import com.diego.taskboard.api.v1.dto.tenant.TenantResponseDTO;
+import com.diego.taskboard.api.v1.dto.user.UserCreateDTO;
+import com.diego.taskboard.api.v1.dto.user.UserResponseDTO;
+import com.diego.taskboard.api.v1.dto.user.UserResponseListDTO;
+import com.diego.taskboard.api.v1.dto.user.UserUpdateDTO;
 import com.mongodb.BasicDBObject;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +15,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.*;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
-public class EmployeeControllerIT {
+public class UserControllerIT {
 
     @Container
     final static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
@@ -49,7 +49,7 @@ public class EmployeeControllerIT {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    private final String EMPLOYEE_PATH = "/api/v1/employees/";
+    private final String USER_PATH = "/api/v1/users/";
 
     @DynamicPropertySource
     static void mongoDbProperties(DynamicPropertyRegistry registry) {
@@ -67,28 +67,28 @@ public class EmployeeControllerIT {
     }
 
     @Test
-    public void whenFindAllEmployeesThenReturnEmployeeList() {
+    public void whenFindAllUsersThenReturnUserList() {
         String tenantId = createTenant("Some tenant");
-        createEmployee("Some Name", "Some Address", tenantId);
-        createEmployee("Another Name", "Another Address", tenantId);
-        EmployeeResponseListDTO employeeResponseListDTO = this.restTemplate
-            .getForObject("http://localhost:" + port + EMPLOYEE_PATH, EmployeeResponseListDTO.class);
-        assertEquals(2, employeeResponseListDTO.getEmployees().size());
+        createUser("Some Name", "Some Address", tenantId);
+        createUser("Another Name", "Another Address", tenantId);
+        UserResponseListDTO userResponseListDTO = this.restTemplate
+            .getForObject("http://localhost:" + port + USER_PATH, UserResponseListDTO.class);
+        assertEquals(2, userResponseListDTO.getUsers().size());
     }
 
     @Test
-    public void whenFindEmployeeByIdThenReturnEmployeeList() {
+    public void whenFindUserByIdThenReturnUserList() {
         String tenantId = createTenant("Some tenant");
-        ResponseEntity<EmployeeResponseDTO> responseEntity = createEmployee("Some Name", "Some Address", tenantId);
-        EmployeeResponseDTO employeeResponseDTO = this.restTemplate.getForObject("http://localhost:" + port +
-                EMPLOYEE_PATH + responseEntity.getBody().getId(), EmployeeResponseDTO.class);
-        assertNotNull(employeeResponseDTO.getId());
+        ResponseEntity<UserResponseDTO> responseEntity = createUser("Some Name", "Some Address", tenantId);
+        UserResponseDTO userResponseDTO = this.restTemplate.getForObject("http://localhost:" + port +
+                USER_PATH + responseEntity.getBody().getId(), UserResponseDTO.class);
+        assertNotNull(userResponseDTO.getId());
     }
 
     @Test
-    public void whenCreateEmployeeThenReturnEmployee() {
+    public void whenCreateUserThenReturnUser() {
         String tenantId = createTenant("Some tenant");
-        ResponseEntity<EmployeeResponseDTO> responseEntity = createEmployee(
+        ResponseEntity<UserResponseDTO> responseEntity = createUser(
                 "Some Name", "Some Address", tenantId);
         assertEquals(201, responseEntity.getStatusCodeValue());
         assertNotNull(responseEntity.getBody());
@@ -99,97 +99,97 @@ public class EmployeeControllerIT {
     }
 
     @Test
-    public void whenCreateEmployeeWithoutNameThenReturnException() {
+    public void whenCreateUserWithoutNameThenReturnException() {
         String tenantId = createTenant("Some tenant");
-        EmployeeCreateDTO employee = EmployeeCreateDTO.Builder.of()
+        UserCreateDTO userCreateDTO = UserCreateDTO.Builder.of()
                 .address("Some Address")
                 .tenantId(tenantId)
                 .build();
-        ResponseEntity<EmployeeResponseDTO> responseEntity = this.restTemplate.postForEntity(
-                "http://localhost:" + port + EMPLOYEE_PATH, employee, EmployeeResponseDTO.class);
+        ResponseEntity<UserResponseDTO> responseEntity = this.restTemplate.postForEntity(
+                "http://localhost:" + port + USER_PATH, userCreateDTO, UserResponseDTO.class);
         assertEquals(400, responseEntity.getStatusCodeValue());
     }
 
     @Test
-    public void whenCreateEmployeeWithoutAddressThenReturnException() {
+    public void whenCreateUserWithoutAddressThenReturnException() {
         String tenantId = createTenant("Some tenant");
-        EmployeeCreateDTO employee = EmployeeCreateDTO.Builder.of()
+        UserCreateDTO userCreateDTO = UserCreateDTO.Builder.of()
                 .name("Some Nome")
                 .tenantId(tenantId)
                 .build();
-        ResponseEntity<EmployeeResponseDTO> responseEntity = this.restTemplate.postForEntity(
-                "http://localhost:" + port + EMPLOYEE_PATH, employee, EmployeeResponseDTO.class);
+        ResponseEntity<UserResponseDTO> responseEntity = this.restTemplate.postForEntity(
+                "http://localhost:" + port + USER_PATH, userCreateDTO, UserResponseDTO.class);
         assertEquals(400, responseEntity.getStatusCodeValue());
     }
 
     @Test
-    public void whenCreateEmployeeWithoutTenantThenReturnException() {
-        EmployeeCreateDTO employee = EmployeeCreateDTO.Builder.of()
+    public void whenCreateUserWithoutTenantThenReturnException() {
+        UserCreateDTO userCreateDTO = UserCreateDTO.Builder.of()
                 .name("Some Nome")
                 .address("Some Address")
                 .build();
-        ResponseEntity<EmployeeResponseDTO> responseEntity = this.restTemplate.postForEntity(
-                "http://localhost:" + port + EMPLOYEE_PATH, employee, EmployeeResponseDTO.class);
+        ResponseEntity<UserResponseDTO> responseEntity = this.restTemplate.postForEntity(
+                "http://localhost:" + port + USER_PATH, userCreateDTO, UserResponseDTO.class);
         assertEquals(400, responseEntity.getStatusCodeValue());
     }
 
     @Test
-    public void whenCreateEmployeeWithTenantButNotFoundThenReturnException() {
-        EmployeeCreateDTO employee = EmployeeCreateDTO.Builder.of()
+    public void whenCreateUserWithTenantButNotFoundThenReturnException() {
+        UserCreateDTO userCreateDTO = UserCreateDTO.Builder.of()
                 .name("Some Nome")
                 .address("Some Address")
                 .tenantId("invalid-tenant-id")
                 .build();
-        ResponseEntity<EmployeeResponseDTO> responseEntity = this.restTemplate.postForEntity(
-                "http://localhost:" + port + EMPLOYEE_PATH, employee, EmployeeResponseDTO.class);
+        ResponseEntity<UserResponseDTO> responseEntity = this.restTemplate.postForEntity(
+                "http://localhost:" + port + USER_PATH, userCreateDTO, UserResponseDTO.class);
         assertEquals(400, responseEntity.getStatusCodeValue());
     }
 
     @Test
-    public void whenUpdateEmployeeThenReturnEmployee() {
+    public void whenUpdateUserThenReturnUser() {
         String tenantId = createTenant("Some tenant");
-        ResponseEntity<EmployeeResponseDTO> responseEntity = createEmployee("Some Name", "Some Address", tenantId);
-        EmployeeResponseDTO employeeResponseDTO = this.restTemplate.getForObject("http://localhost:" + port +
-                EMPLOYEE_PATH + responseEntity.getBody().getId(), EmployeeResponseDTO.class);
-        assertNotNull(employeeResponseDTO.getId());
+        ResponseEntity<UserResponseDTO> responseEntity = createUser("Some Name", "Some Address", tenantId);
+        UserResponseDTO userResponseDTO = this.restTemplate.getForObject("http://localhost:" + port +
+                USER_PATH + responseEntity.getBody().getId(), UserResponseDTO.class);
+        assertNotNull(userResponseDTO.getId());
 
-        EmployeeUpdateDTO employeeUpdateDTO = EmployeeUpdateDTO.Builder.of()
+        UserUpdateDTO userUpdateDTO = UserUpdateDTO.Builder.of()
                 .name("Edited Name")
-                .address(employeeResponseDTO.getAddress())
+                .address(userResponseDTO.getAddress())
                 .build();
 
         Map<String, String> params = new HashMap<>();
-        params.put("id", employeeResponseDTO.getId());
-        this.restTemplate.put("http://localhost:" + port + EMPLOYEE_PATH + "/{id}",
-                employeeUpdateDTO, params);
+        params.put("id", userResponseDTO.getId());
+        this.restTemplate.put("http://localhost:" + port + USER_PATH + "/{id}",
+                userUpdateDTO, params);
 
-        EmployeeResponseDTO editedResponseDTO = this.restTemplate.getForObject("http://localhost:" + port +
-                EMPLOYEE_PATH + responseEntity.getBody().getId(), EmployeeResponseDTO.class);
+        UserResponseDTO editedResponseDTO = this.restTemplate.getForObject("http://localhost:" + port +
+                USER_PATH + responseEntity.getBody().getId(), UserResponseDTO.class);
         assertNotNull(editedResponseDTO.getId());
         assertEquals(editedResponseDTO.getName(), "Edited Name");
     }
 
     @Test
-    public void whenDeleteEmployeeThenReturnNoContent() {
+    public void whenDeleteUserThenReturnNoContent() {
         String tenantId = createTenant("Some tenant");
-        ResponseEntity<EmployeeResponseDTO> responseEntity = createEmployee(
+        ResponseEntity<UserResponseDTO> responseEntity = createUser(
                 "Some Name", "Some Address", tenantId);
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-        ResponseEntity result = restTemplate.exchange("http://localhost:" + port + EMPLOYEE_PATH +
+        ResponseEntity result = restTemplate.exchange("http://localhost:" + port + USER_PATH +
             responseEntity.getBody().getId(), HttpMethod.DELETE, entity, ResponseEntity.class);
         assertEquals(204, result.getStatusCodeValue());
     }
 
-    private ResponseEntity<EmployeeResponseDTO> createEmployee (String name, String address, String tenantId) {
-        EmployeeCreateDTO employee = EmployeeCreateDTO.Builder.of()
+    private ResponseEntity<UserResponseDTO> createUser(String name, String address, String tenantId) {
+        UserCreateDTO userCreateDTO = UserCreateDTO.Builder.of()
                 .name(name)
                 .address(address)
                 .tenantId(tenantId)
                 .build();
-        return this.restTemplate.postForEntity("http://localhost:" + port + EMPLOYEE_PATH, employee,
-                EmployeeResponseDTO.class);
+        return this.restTemplate.postForEntity("http://localhost:" + port + USER_PATH, userCreateDTO,
+                UserResponseDTO.class);
     }
 
     private String createTenant (String name) {

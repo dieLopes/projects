@@ -1,36 +1,36 @@
-package com.diego.taskboard.validator.employee;
+package com.diego.taskboard.validator.user;
 
-import com.diego.taskboard.builder.EmployeeBuilder;
-import com.diego.taskboard.exception.EmployeeBadRequestException;
+import com.diego.taskboard.builder.UserBuilder;
+import com.diego.taskboard.exception.BadRequestException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EmployeeAddressValidatorTest {
+public class UserAddressValidatorTest {
 
     @InjectMocks
-    private EmployeeAddressValidator employeeAddressValidator;
+    private UserAddressValidator userAddressValidator;
 
     @Test
     public void whenTenantNameIsNotNullOrEmptyThenPassWithoutException () {
-        employeeAddressValidator.validate(EmployeeBuilder.of()
+        userAddressValidator.validate(UserBuilder.of()
                 .name("Some Name")
                 .address("Some Address")
                 .build());
     }
 
-    @Test(expected = EmployeeBadRequestException.class)
+    @Test(expected = BadRequestException.class)
     public void whenTenantNameIsNullThenReturnException () {
-        employeeAddressValidator.validate(EmployeeBuilder.of()
+        userAddressValidator.validate(UserBuilder.of()
                 .name("Some Name")
                 .build());
     }
 
-    @Test(expected = EmployeeBadRequestException.class)
+    @Test(expected = BadRequestException.class)
     public void whenTenantNameIsEmptyThenReturnException () {
-        employeeAddressValidator.validate(EmployeeBuilder.of()
+        userAddressValidator.validate(UserBuilder.of()
                 .name("Some Name")
                 .address("")
                 .build());

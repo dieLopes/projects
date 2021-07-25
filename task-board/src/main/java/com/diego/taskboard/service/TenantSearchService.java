@@ -1,7 +1,7 @@
 package com.diego.taskboard.service;
 
 import com.diego.taskboard.domain.Tenant;
-import com.diego.taskboard.exception.TenantNotFoundException;
+import com.diego.taskboard.exception.NotFoundException;
 import com.diego.taskboard.repository.TenantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,10 +21,10 @@ public class TenantSearchService {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public Tenant findById(String id) {
         if (id == null) {
-            throw new TenantNotFoundException("Tenant not found");
+            throw new NotFoundException("Tenant not found");
         }
         return tenantRepository.findById(id)
-                .orElseThrow(() -> new TenantNotFoundException("Tenant not found"));
+                .orElseThrow(() -> new NotFoundException("Tenant not found"));
     }
 
     @Transactional(propagation = Propagation.NOT_SUPPORTED)

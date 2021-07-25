@@ -1,36 +1,36 @@
-package com.diego.taskboard.validator.employee;
+package com.diego.taskboard.validator.user;
 
-import com.diego.taskboard.builder.EmployeeBuilder;
-import com.diego.taskboard.exception.EmployeeBadRequestException;
+import com.diego.taskboard.builder.UserBuilder;
+import com.diego.taskboard.exception.BadRequestException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EmployeeNameValidatorTest {
+public class UserNameValidatorTest {
 
     @InjectMocks
-    private EmployeeNameValidator employeeNameValidator;
+    private UserNameValidator userNameValidator;
 
     @Test
     public void whenTenantNameIsNotNullOrEmptyThenPassWithoutException () {
-        employeeNameValidator.validate(EmployeeBuilder.of()
-                .name("Some Employee")
+        userNameValidator.validate(UserBuilder.of()
+                .name("Some User")
                 .address("Some Address")
                 .build());
     }
 
-    @Test(expected = EmployeeBadRequestException.class)
+    @Test(expected = BadRequestException.class)
     public void whenTenantNameIsNullThenReturnException () {
-        employeeNameValidator.validate(EmployeeBuilder.of()
+        userNameValidator.validate(UserBuilder.of()
                 .address("Some Address")
                 .build());
     }
 
-    @Test(expected = EmployeeBadRequestException.class)
+    @Test(expected = BadRequestException.class)
     public void whenTenantNameIsEmptyThenReturnException () {
-        employeeNameValidator.validate(EmployeeBuilder.of()
+        userNameValidator.validate(UserBuilder.of()
                 .name("")
                 .address("Some Address")
                 .build());
