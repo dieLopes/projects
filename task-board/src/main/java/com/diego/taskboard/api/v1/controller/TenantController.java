@@ -39,7 +39,7 @@ public class TenantController {
 
     @ApiOperation(value = "Return tenant by id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Resquest responses OK"),
+            @ApiResponse(code = 200, message = "Request responses OK"),
             @ApiResponse(code = 500, message = "Server error"),
     })
     @GetMapping(value = "/{id}", produces="application/json")
@@ -49,7 +49,7 @@ public class TenantController {
 
     @ApiOperation(value = "Return all tenants")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Resquest responses OK"),
+            @ApiResponse(code = 200, message = "Request responses OK"),
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server error"),
     })
@@ -72,7 +72,7 @@ public class TenantController {
 
     @ApiOperation(value = "Edit tenant")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Resquest responses OK"),
+            @ApiResponse(code = 200, message = "Request responses OK"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server error"),

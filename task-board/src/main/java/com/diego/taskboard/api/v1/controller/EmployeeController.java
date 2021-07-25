@@ -40,7 +40,7 @@ public class EmployeeController {
 
     @ApiOperation(value = "Return employee by id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Resquest responses OK"),
+            @ApiResponse(code = 200, message = "Request responses OK"),
             @ApiResponse(code = 500, message = "Server error"),
     })
     @GetMapping(value = "/{id}", produces="application/json")
@@ -50,7 +50,7 @@ public class EmployeeController {
 
     @ApiOperation(value = "Return all employees")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Resquest responses OK"),
+            @ApiResponse(code = 200, message = "Request responses OK"),
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server error"),
     })
@@ -73,7 +73,7 @@ public class EmployeeController {
 
     @ApiOperation(value = "Edit employee")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Resquest responses OK"),
+            @ApiResponse(code = 200, message = "Request responses OK"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server error"),
@@ -88,7 +88,7 @@ public class EmployeeController {
 
     @ApiOperation(value = "Remove employee")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Resquest responses OK"),
+            @ApiResponse(code = 204, message = "No content"),
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server error"),
     })
