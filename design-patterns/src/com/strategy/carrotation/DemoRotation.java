@@ -54,6 +54,9 @@ public class DemoRotation {
 
     private static boolean rotationIfElse (int day, int plate) {
         int lastNumber = plate % 10;
+        if (day > 7) {
+            throw new IllegalArgumentException("O dia deve ser entre 0 e 7");
+        }
         if (day == 1 || day == 7) {
             return true;
         } else if (day == 2 && (List.of(0, 1).contains(lastNumber))) {
@@ -64,9 +67,7 @@ public class DemoRotation {
             return true;
         } else if (day == 5 && (List.of(6, 7).contains(lastNumber))) {
             return true;
-        } else if (day == 6 && (List.of(8, 9).contains(lastNumber))) {
-            return true;
         }
-        throw new IllegalArgumentException("O dia deve ser entre 0 e 7");
+        return day == 6 && (List.of(8, 9).contains(lastNumber));
     }
 }
