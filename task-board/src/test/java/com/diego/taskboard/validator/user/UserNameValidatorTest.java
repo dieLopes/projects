@@ -4,14 +4,12 @@ import com.diego.taskboard.builder.UserBuilder;
 import com.diego.taskboard.exception.BadRequestException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserNameValidatorTest {
 
-    @InjectMocks
-    private UserNameValidator userNameValidator;
+    private final UserNameValidator userNameValidator = new UserNameValidator();
 
     @Test
     public void whenTenantNameIsNotNullOrEmptyThenPassWithoutException () {

@@ -4,14 +4,12 @@ import com.diego.taskboard.builder.TenantBuilder;
 import com.diego.taskboard.exception.BadRequestException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TenantNameValidatorTest {
 
-    @InjectMocks
-    private TenantNameValidator tenantNameValidator;
+    private final TenantNameValidator tenantNameValidator = new TenantNameValidator();
 
     @Test
     public void whenTenantNameIsNotNullOrEmptyThenPassWithoutException () {

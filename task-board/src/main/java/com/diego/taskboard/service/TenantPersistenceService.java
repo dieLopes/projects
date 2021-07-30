@@ -3,10 +3,12 @@ package com.diego.taskboard.service;
 import com.diego.taskboard.domain.Tenant;
 import com.diego.taskboard.repository.TenantRepository;
 import com.diego.taskboard.validator.IValidator;
+import com.diego.taskboard.validator.tenant.TenantNameValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,14 +17,15 @@ public class TenantPersistenceService {
 
     private final TenantRepository tenantRepository;
     private final TenantSearchService tenantSearchService;
-    private final List<IValidator<Tenant>> validators;
+    private static final List<IValidator<Tenant>> validations = new ArrayList<>();
+    static {
+        validations.add(new TenantNameValidator());
+    }
 
     public TenantPersistenceService(TenantRepository tenantRepository,
-                                    TenantSearchService tenantSearchService,
-                                    List<IValidator<Tenant>> validators) {
+                                    TenantSearchService tenantSearchService) {
         this.tenantRepository = tenantRepository;
         this.tenantSearchService = tenantSearchService;
-        this.validators = validators;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -41,6 +44,6 @@ public class TenantPersistenceService {
     }
 
     private void validateTenant (Tenant tenant) {
-        validators.forEach(val -> val.validate(tenant));
+        validations.forEach(val -> val.validate(tenant));
     }
 }

@@ -3,9 +3,7 @@ package com.diego.taskboard.validator.tenant;
 import com.diego.taskboard.domain.Tenant;
 import com.diego.taskboard.exception.BadRequestException;
 import com.diego.taskboard.validator.IValidator;
-import org.springframework.stereotype.Service;
 
-@Service
 public class TenantNameValidator implements IValidator<Tenant> {
 
     @Override

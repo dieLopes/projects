@@ -6,22 +6,17 @@ import com.diego.taskboard.domain.Tenant;
 import com.diego.taskboard.domain.User;
 import com.diego.taskboard.exception.NotFoundException;
 import com.diego.taskboard.repository.UserRepository;
-import com.diego.taskboard.validator.IValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.List;
-import java.util.function.Consumer;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,8 +30,6 @@ public class UserPersistenceServiceTest {
     private UserSearchService userSearchService;
     @Mock
     private TenantSearchService tenantSearchService;
-    @Mock
-    private List<IValidator<User>> validators;
 
     @Test
     public void whenCreateUserThenSaveUser () {
@@ -47,7 +40,6 @@ public class UserPersistenceServiceTest {
         userPersistenceService.save(user);
         verify(userRepository).save(any(User.class));
         verify(tenantSearchService).findById(eq("some-tenant-id"));
-        verify(validators).forEach(any(Consumer.class));
     }
 
     @Test
@@ -58,7 +50,6 @@ public class UserPersistenceServiceTest {
         userPersistenceService.update(user.getId(), user);
         verify(userRepository).save(any(User.class));
         verify(userSearchService).findById(eq(user.getId()));
-        verify(validators).forEach(any(Consumer.class));
     }
 
     @Test
@@ -72,7 +63,6 @@ public class UserPersistenceServiceTest {
                 .hasMessage("User not found");
         verify(userSearchService).findById(eq(user.getId()));
         verify(userRepository, never()).save(any(User.class));
-        verifyNoInteractions(validators);
     }
 
     @Test
@@ -85,7 +75,6 @@ public class UserPersistenceServiceTest {
                 .hasMessage("User not found");
         verify(userSearchService).findById(eq(user.getId()));
         verify(userRepository, never()).save(any(User.class));
-        verifyNoInteractions(validators);
     }
 
     @Test
