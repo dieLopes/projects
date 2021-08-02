@@ -1,4 +1,4 @@
-package com.strategy.pay;
+package com.comportamental.strategy.pay;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.strategy.pay;
+package com.comportamental.strategy.pay;
 
 public class CreditCard {
     private int amount;

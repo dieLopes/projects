@@ -1,4 +1,4 @@
-package com.strategy.carrotation;
+package com.comportamental.strategy.carrotation;
 
 public class DaySeven implements Rotation {
 

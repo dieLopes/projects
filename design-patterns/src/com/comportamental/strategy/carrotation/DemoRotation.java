@@ -1,4 +1,4 @@
-package com.strategy.carrotation;
+package com.comportamental.strategy.carrotation;
 
 import java.util.Calendar;
 import java.util.HashMap;
