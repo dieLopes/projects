@@ -1,5 +1,15 @@
 package com.comportamental.strategy.carrotation;
 
+import com.comportamental.strategy.carrotation.validation.DayFive;
+import com.comportamental.strategy.carrotation.validation.DayFour;
+import com.comportamental.strategy.carrotation.validation.DayOne;
+import com.comportamental.strategy.carrotation.validation.DaySeven;
+import com.comportamental.strategy.carrotation.validation.DaySix;
+import com.comportamental.strategy.carrotation.validation.DayThree;
+import com.comportamental.strategy.carrotation.validation.DayTwo;
+import com.comportamental.strategy.carrotation.validation.Rotation;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -19,12 +29,12 @@ public class DemoRotation {
      * Day 7 - All cars
      */
 
-    private static final Map<String, Integer> cars = new HashMap<>();
+    private static final List<Car> cars = new ArrayList<>();
     static {
-        cars.put("Corsa", 2001);
-        cars.put("Celta", 2578);
-        cars.put("Gol", 1593);
-        cars.put("HB20", 4752);
+        cars.add(new Car("Corsa", "AAA2001", "Red"));
+        cars.add(new Car("Celta",  "BBB5893", "Blue"));
+        cars.add(new Car("Gol",  "CCC7439", "Yellow"));
+        cars.add(new Car("HB20",  "DDD5646", "Green"));
     }
 
     private static final Map<Integer, Rotation> rotations = new HashMap<>();
@@ -41,19 +51,18 @@ public class DemoRotation {
     public static void main(String[] args) {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
-        cars.forEach((car, plate) -> System.out.println(car + " com a place " + plate + ": " + rotationIfElse(day, plate)));
+        cars.forEach(car -> System.out.println(car.getName() + " com a place " + car.getPlate() + ": " + rotationIfElse(day, car)));
         System.out.println("----------------------------------");
-        cars.forEach((car, plate) -> System.out.println(car + " com a place " + plate + ": " + rotationStrategy(day, plate)));
+        cars.forEach(car -> System.out.println(car.getName() + " com a place " + car.getPlate() + ": " + rotationStrategy(day, car)));
     }
 
-    private static boolean rotationStrategy (int day, int plate) {
-        return Optional.ofNullable(rotations.get(day))
-                .orElseThrow(() -> new IllegalArgumentException("O dia deve ser entre 0 e 7"))
-                .validateRotation(plate % 10);
+    private static boolean rotationStrategy (int day, Car car) {
+        Rotation rotation = rotations.get(day);
+        return rotation.validateRotation(car);
     }
 
-    private static boolean rotationIfElse (int day, int plate) {
-        int lastNumber = plate % 10;
+    private static boolean rotationIfElse (int day, Car car) {
+        int lastNumber = Integer.parseInt(car.getPlate().substring(car.getPlate().length() - 1));
         if (day > 7) {
             throw new IllegalArgumentException("O dia deve ser entre 0 e 7");
         }
