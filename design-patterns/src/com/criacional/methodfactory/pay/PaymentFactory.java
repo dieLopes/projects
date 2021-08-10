@@ -1,7 +1,7 @@
-package com.criacao.methodfactory.pay;
+package com.criacional.methodfactory.pay;
 
-import static com.criacao.methodfactory.pay.PaymentType.CREDIT_CARD;
-import static com.criacao.methodfactory.pay.PaymentType.PIC_PAY;
+import static com.criacional.methodfactory.pay.PaymentType.CREDIT_CARD;
+import static com.criacional.methodfactory.pay.PaymentType.PIC_PAY;
 
 public class PaymentFactory {
 

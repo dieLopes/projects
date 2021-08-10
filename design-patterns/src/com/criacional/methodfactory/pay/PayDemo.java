@@ -1,4 +1,4 @@
-package com.criacao.methodfactory.pay;
+package com.criacional.methodfactory.pay;
 
 public class PayDemo {
 

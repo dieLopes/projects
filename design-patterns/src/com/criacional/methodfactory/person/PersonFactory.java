@@ -1,4 +1,4 @@
-package com.criacao.methodfactory.person;
+package com.criacional.methodfactory.person;
 
 public class PersonFactory {
 
