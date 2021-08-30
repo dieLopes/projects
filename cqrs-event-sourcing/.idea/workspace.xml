@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c882350f-6c6b-4437-b293-df7923d41977" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/.idea/dbnavigator.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/src/com/strategy/CreditCard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/src/com/strategy/Demo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/src/com/strategy/Order.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/src/com/strategy/PayByCreditCard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/src/com/strategy/PayByPayPal.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/src/com/strategy/PayStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../strategy-pattern/strategy-pattern.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../task-board/src/main/java/com/diego/taskboard/config/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task-board/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../task-board/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task-board/src/main/java/com/diego/taskboard/config/SwaggerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task-board/src/main/java/com/diego/taskboard/config/SwaggerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task-board/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../task-board/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1voHEt8DPmKBL2jZafEZlJqrhmL" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c882350f-6c6b-4437-b293-df7923d41977" name="Default Changelist" comment="" />
+      <created>1627221415847</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1627221415847</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
