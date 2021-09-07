@@ -1,6 +1,6 @@
 # projects
 
-*task-board*
+*manager*
 
 - Projeto criado utilizando Spring Boot, mongoDB e APIs Rest e Swagger. Os testes unitários utilizam JUnit e Mockito e os teste integrados utilizam JUnit e TestContainers.
 
