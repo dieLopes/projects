@@ -15,3 +15,11 @@
 *stream-example*
 
 - Projeto que possui apenas algumas classes com testes sobre funcionamento de streams do java 8.
+
+*desafio-java-springboot*
+
+- Projeto realizado durtante o desafio de criação de uma aplicação utilizando Spring Boot e Rest API
+
+*design-patterns*
+
+- Projeto de estudo com alguns exemplos de utilização de design patterns
