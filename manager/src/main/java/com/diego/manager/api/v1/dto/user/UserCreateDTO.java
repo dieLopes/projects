@@ -109,6 +109,16 @@ public class UserCreateDTO implements Serializable {
             return this;
         }
 
+        public Builder username (String username) {
+            user.username = username;
+            return this;
+        }
+
+        public Builder password (String password) {
+            user.password = password;
+            return this;
+        }
+
         public Builder tenantId (String tenantId) {
             user.tenantId = tenantId;
             return this;

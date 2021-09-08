@@ -2,35 +2,34 @@ package com.diego.manager.validator.user;
 
 import com.diego.manager.builder.UserBuilder;
 import com.diego.manager.exception.BadRequestException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
 
-@RunWith(MockitoJUnitRunner.class)
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 public class UserAddressValidatorTest {
 
     private final UserAddressValidator userAddressValidator = new UserAddressValidator();
 
     @Test
     public void whenTenantNameIsNotNullOrEmptyThenPassWithoutException () {
-        userAddressValidator.validate(UserBuilder.of()
+        assertDoesNotThrow(() -> userAddressValidator.validate(UserBuilder.of()
                 .name("Some Name")
                 .address("Some Address")
-                .build());
+                .build()));
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void whenTenantNameIsNullThenReturnException () {
-        userAddressValidator.validate(UserBuilder.of()
-                .name("Some Name")
-                .build());
+        assertThatThrownBy(() -> userAddressValidator.validate(UserBuilder.of().name("Some Name").build()))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("Address is a mandatory field");
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void whenTenantNameIsEmptyThenReturnException () {
-        userAddressValidator.validate(UserBuilder.of()
-                .name("Some Name")
-                .address("")
-                .build());
+        assertThatThrownBy(() -> userAddressValidator.validate(UserBuilder.of().name("Some Name").address("").build()))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("Address is a mandatory field");
     }
 }

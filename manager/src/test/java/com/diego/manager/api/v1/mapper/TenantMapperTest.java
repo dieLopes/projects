@@ -1,20 +1,17 @@
 package com.diego.manager.api.v1.mapper;
 
+import com.diego.manager.api.v1.dto.tenant.TenantCreateDTO;
 import com.diego.manager.api.v1.dto.tenant.TenantResponseDTO;
 import com.diego.manager.api.v1.dto.tenant.TenantUpdateDTO;
-import com.diego.manager.api.v1.dto.tenant.TenantCreateDTO;
 import com.diego.manager.builder.TenantBuilder;
 import com.diego.manager.domain.Tenant;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-@RunWith(MockitoJUnitRunner.class)
 public class TenantMapperTest {
 
     @Test

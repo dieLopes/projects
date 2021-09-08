@@ -54,7 +54,7 @@ public class TenantController {
             @ApiResponse(code = 500, message = "Server error"),
     })
     @GetMapping(produces="application/json")
-    public ResponseEntity<TenantResponseListDTO> getAll () {
+    public ResponseEntity<TenantResponseListDTO> get () {
         return ResponseEntity.ok(new TenantResponseListDTO(TenantMapper.entitiesToDTOs(tenantSearchService.findAll())));
     }
 

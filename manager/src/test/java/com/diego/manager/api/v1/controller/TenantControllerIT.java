@@ -1,26 +1,15 @@
 package com.diego.manager.api.v1.controller;
 
+import com.diego.manager.api.BaseIT;
 import com.diego.manager.api.v1.dto.tenant.TenantCreateDTO;
 import com.diego.manager.api.v1.dto.tenant.TenantResponseDTO;
 import com.diego.manager.api.v1.dto.tenant.TenantResponseListDTO;
 import com.diego.manager.api.v1.dto.tenant.TenantUpdateDTO;
-import com.mongodb.BasicDBObject;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,36 +17,12 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Testcontainers
-public class TenantControllerIT {
+public class TenantControllerIT extends BaseIT {
 
-    @Container
-    final static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
-    @LocalServerPort
-    private int port;
+    private final String TENANT_PATH = "/manager/api/v1/tenants/";
     @Autowired
     private TestRestTemplate restTemplate;
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
-    private final String TENANT_PATH = "/api/v1/tenants/";
-
-    @DynamicPropertySource
-    static void mongoDbProperties(DynamicPropertyRegistry registry) {
-        mongoDBContainer.start();
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-    }
-
-    @Before
-    public void initDb () {
-        for (String collectionName : mongoTemplate.getCollectionNames()) {
-            if (!collectionName.startsWith("system.")) {
-                mongoTemplate.getCollection(collectionName).deleteMany(new BasicDBObject());
-            }
-        }
-    }
 
     @Test
     public void whenFindAllTenantsThenReturnTenantList() {
@@ -118,7 +83,7 @@ public class TenantControllerIT {
         TenantCreateDTO tenant = TenantCreateDTO.Builder.of()
                 .name(name)
                 .build();
-        return this.restTemplate.postForEntity("http://localhost:" + port + "/api/v1/tenants/", tenant,
+        return this.restTemplate.postForEntity("http://localhost:" + port + TENANT_PATH, tenant,
                 TenantResponseDTO.class);
     }
 }

@@ -6,8 +6,7 @@ import com.diego.manager.builder.UserBuilder;
 import com.diego.manager.api.v1.dto.user.UserUpdateDTO;
 import com.diego.manager.builder.TenantBuilder;
 import com.diego.manager.domain.User;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
-@RunWith(MockitoJUnitRunner.class)
 public class UserMapperTest {
 
     @Test

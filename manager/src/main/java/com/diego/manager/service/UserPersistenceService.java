@@ -1,5 +1,7 @@
 package com.diego.manager.service;
 
+import com.diego.manager.exception.BadRequestException;
+import com.diego.manager.exception.NotFoundException;
 import com.diego.manager.repository.UserRepository;
 import com.diego.manager.domain.Tenant;
 import com.diego.manager.domain.User;
@@ -37,7 +39,12 @@ public class UserPersistenceService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public User save(User user) {
-        Tenant tenant = tenantSearchService.findById(user.getTenant().getId());
+        Tenant tenant;
+        try {
+            tenant = tenantSearchService.findById(user.getTenant().getId());
+        } catch (NotFoundException e) {
+            throw new BadRequestException("Tenant not found");
+        }
         user.setId(UUID.randomUUID().toString());
         user.setTenant(tenant);
         validateUser(user);

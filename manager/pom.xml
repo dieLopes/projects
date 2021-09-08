@@ -6,20 +6,22 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.5.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 
 	<groupId>com.diego</groupId>
 	<artifactId>manager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>task-board</name>
+	<name>manager</name>
 	<description>Project Manager Using Spring Boot And Mongo BD</description>
 
 	<properties>
 		<java.version>11</java.version>
 		<swagger.version>2.9.2</swagger.version>
-		<thymeleaf.version>1.5.2.RELEASE</thymeleaf.version>
 		<modelmapper.version>2.3.8</modelmapper.version>
+		<skip.integration.tests>false</skip.integration.tests>
+		<failsafe.plugin.version>3.0.0-M4</failsafe.plugin.version>
+		<surefire.plugin.version>3.0.0-M4</surefire.plugin.version>
 	</properties>
 
 	<dependencies>
@@ -42,11 +44,6 @@
             <artifactId>modelmapper</artifactId>
             <version>${modelmapper.version}</version>
         </dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -71,25 +68,80 @@
 			<version>1.15.3</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>2.23.0</version>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 
 	<build>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M5</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.surefire</groupId>
-						<artifactId>surefire-junit4</artifactId>
-						<version>3.0.0-M5</version>
-					</dependency>
-				</dependencies>
+				<version>${surefire.plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${failsafe.plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<classesDirectory>${project.build.outputDirectory}
+							</classesDirectory>
+							<skipTests>${skip.integration.tests}</skipTests>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.5</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includes>
+						<include>com/diego/manager/*</include>
+					</includes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

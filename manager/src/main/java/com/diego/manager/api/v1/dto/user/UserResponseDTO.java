@@ -19,6 +19,8 @@ public class UserResponseDTO implements Serializable {
     private String name;
     @ApiModelProperty("User address")
     private String address;
+    @ApiModelProperty("User login")
+    private String username;
     @ApiModelProperty("User contacts")
     private Set<ContactDTO> contacts = new HashSet<>();
     @ApiModelProperty("User tenant")
@@ -48,6 +50,14 @@ public class UserResponseDTO implements Serializable {
         this.address = address;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public Set<ContactDTO> getContacts() {
         return contacts;
     }
@@ -70,6 +80,7 @@ public class UserResponseDTO implements Serializable {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
+                ", username='" + username + '\'' +
             '}';
     }
 }
