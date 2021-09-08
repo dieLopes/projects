@@ -1,6 +1,6 @@
 # projects
 
-*task-board*
+*manager*
 
 - Projeto criado utilizando Spring Boot, mongoDB e APIs Rest e Swagger. Os testes unitários utilizam JUnit e Mockito e os teste integrados utilizam JUnit e TestContainers.
 
@@ -15,3 +15,11 @@
 *stream-example*
 
 - Projeto que possui apenas algumas classes com testes sobre funcionamento de streams do java 8.
+
+*desafio-java-springboot*
+
+- Projeto realizado durtante o desafio de criação de uma aplicação utilizando Spring Boot e Rest API
+
+*design-patterns*
+
+- Projeto de estudo com alguns exemplos de utilização de design patterns
