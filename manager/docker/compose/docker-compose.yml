@@ -1,0 +1,27 @@
+version: "3.8"
+
+networks:
+    shared-net:
+        driver: bridge
+services:
+    manager:
+        image: manager:local
+        container_name: manager_container
+        environment:
+            JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,address=8787,suspend=n
+        ports:
+            - 8080:8080
+        depends_on:
+            - mongo
+        links:
+            - mongo
+        networks:
+            - shared-net
+    mongo:
+        image: mongo:latest
+        container_name: mongo_container
+        hostname: mongo
+        ports:
+            - 27017:27017
+        networks:
+            - shared-net
