@@ -1,0 +1,8 @@
+Para executar a imagem, é necessário seguir os passos.
+
+- Executar o comando docker build manager:{tag} . na raiz do projeto (onde está o Dockerfile)
+- Acessar docker/compose
+- Executar docker-compose up
+
+No arquivo compose está sendo utilizado o mongodb versão latest e a versão local do app manager alem de criar um
+network para conectar os containers
