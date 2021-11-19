@@ -22,7 +22,10 @@ public class OrderMapper {
     }
 
     public static OrderResponseDTO entityToDTO(Order order) {
-        return mapper.map(order, OrderResponseDTO.class);
+        OrderResponseDTO orderResponseDTO = mapper.map(order, OrderResponseDTO.class);
+        orderResponseDTO.setCompanyCode(order.getCompany().getCode());
+        orderResponseDTO.setWalletId(order.getWallet().getId());
+        return orderResponseDTO;
     }
 
     public static List<OrderResponseDTO> entitiesToDTOs (List<Order> orders) {

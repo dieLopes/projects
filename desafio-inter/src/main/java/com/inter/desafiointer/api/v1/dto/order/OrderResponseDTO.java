@@ -1,7 +1,5 @@
 package com.inter.desafiointer.api.v1.dto.order;
 
-import com.inter.desafiointer.api.v1.dto.company.CompanyResponseDTO;
-import com.inter.desafiointer.api.v1.dto.wallet.WalletResponseDTO;
 import com.inter.desafiointer.domain.OrderType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -14,22 +12,22 @@ import java.time.LocalDateTime;
 public class OrderResponseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty(value = "Order id", required = true)
+    @ApiModelProperty("Order id")
     private String id;
-    @ApiModelProperty(value = "Order date", required = true)
+    @ApiModelProperty("Order date")
     private LocalDateTime date;
-    @ApiModelProperty(value = "Order type", required = true, allowableValues = "BUY,SELL")
+    @ApiModelProperty("Order type")
     private OrderType type;
-    @ApiModelProperty(value = "Amount company shares", required = true)
+    @ApiModelProperty("Amount company shares")
     private int amount;
-    @ApiModelProperty(value = "Unit price of the company's share", required = true)
+    @ApiModelProperty("Unit price of the company's share")
     private BigDecimal unitPrice;
-    @ApiModelProperty(value = "Order total price", required = true)
+    @ApiModelProperty("Order total price")
     private BigDecimal totalPrice;
-    @ApiModelProperty(value = "Company", required = true)
-    private CompanyResponseDTO company;
-    @ApiModelProperty(value = "Wallet", required = true)
-    private WalletResponseDTO wallet;
+    @ApiModelProperty("Company code")
+    private String companyCode;
+    @ApiModelProperty("Wallet id")
+    private String walletId;
 
     public String getId() {
         return id;
@@ -79,19 +77,19 @@ public class OrderResponseDTO implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    public CompanyResponseDTO getCompany() {
-        return company;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setCompany(CompanyResponseDTO company) {
-        this.company = company;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
-    public WalletResponseDTO getWallet() {
-        return wallet;
+    public String getWalletId() {
+        return walletId;
     }
 
-    public void setWallet(WalletResponseDTO wallet) {
-        this.wallet = wallet;
+    public void setWalletId(String walletId) {
+        this.walletId = walletId;
     }
 }
