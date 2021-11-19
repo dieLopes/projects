@@ -13,14 +13,14 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "User Service")
-@Controller
+@RestController
 @RequestMapping(ApiPath.API_PATH + "/users")
 public class UserController {
 
@@ -33,7 +33,7 @@ public class UserController {
         this.userPersistenceService = userPersistenceService;
     }
 
-    @ApiOperation(value = "Return filtered users")
+    @ApiOperation(value = "Return all users")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Request responses OK"),
             @ApiResponse(code = 500, message = "Server error"),
