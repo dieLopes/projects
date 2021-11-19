@@ -15,6 +15,7 @@ import static com.inter.desafiointer.domain.CompanyStatus.ACTIVE;
 @Table(name = "TB_COMPANY")
 public class Company implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "ID", nullable = false)
     private String id;

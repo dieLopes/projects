@@ -14,10 +14,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static com.inter.desafiointer.domain.OrderStatus.OK;
+import static com.inter.desafiointer.domain.OrderStatus.WAITING;
+
 @Entity
 @Table(name = "TB_ORDER")
 public class Order implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "ID", nullable = false)
     private String id;
@@ -38,6 +42,9 @@ public class Order implements Serializable {
     private BigDecimal unitPrice;
     @Column(name = "TOTAL_PRICE", nullable = false)
     private BigDecimal totalPrice;
+    @Column(name = "STATUS", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = WAITING;
 
     private transient String code;
 
@@ -103,6 +110,14 @@ public class Order implements Serializable {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public String getCode() {

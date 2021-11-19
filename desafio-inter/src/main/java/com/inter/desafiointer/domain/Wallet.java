@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @Table(name = "TB_WALLET")
 public class Wallet implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "ID", nullable = false)
     private String id;
@@ -20,6 +21,7 @@ public class Wallet implements Serializable {
     private User user;
     @Column(name = "BALANCE", nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
+
 
     public String getId() {
         return id;

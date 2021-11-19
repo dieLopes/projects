@@ -28,6 +28,8 @@ public class OrderResponseDTO implements Serializable {
     private String companyCode;
     @ApiModelProperty("Wallet id")
     private String walletId;
+    @ApiModelProperty("Order status")
+    private String status;
 
     public String getId() {
         return id;
@@ -91,5 +93,13 @@ public class OrderResponseDTO implements Serializable {
 
     public void setWalletId(String walletId) {
         this.walletId = walletId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

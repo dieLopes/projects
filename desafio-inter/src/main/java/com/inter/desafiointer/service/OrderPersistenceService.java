@@ -3,6 +3,7 @@ package com.inter.desafiointer.service;
 import com.inter.desafiointer.domain.Company;
 import com.inter.desafiointer.domain.Order;
 import com.inter.desafiointer.domain.Wallet;
+import com.inter.desafiointer.domain.WalletStock;
 import com.inter.desafiointer.exception.BadRequestException;
 import com.inter.desafiointer.repository.CompanyRepository;
 import com.inter.desafiointer.repository.OrderRepository;
@@ -12,6 +13,10 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+import static com.inter.desafiointer.domain.OrderStatus.CANCELLED;
+import static com.inter.desafiointer.domain.OrderStatus.OK;
 
 @Service
 public class OrderPersistenceService {
@@ -19,13 +24,16 @@ public class OrderPersistenceService {
     private final OrderRepository orderRepository;
     private final CompanyRepository companyRepository;
     private final WalletRepository walletRepository;
+    private final WalletStockPersistenceService walletStockPersistenceService;
 
     public OrderPersistenceService(OrderRepository orderRepository,
                                    CompanyRepository companyRepository,
-                                   WalletRepository walletRepository) {
+                                   WalletRepository walletRepository,
+                                   WalletStockPersistenceService walletStockPersistenceService) {
         this.orderRepository = orderRepository;
         this.companyRepository = companyRepository;
         this.walletRepository = walletRepository;
+        this.walletStockPersistenceService = walletStockPersistenceService;
     }
 
     public Order save (Order order) {
@@ -38,8 +46,22 @@ public class OrderPersistenceService {
         order.setCompany(company);
         order.setUnitPrice(company.getPrice());
         order.setTotalPrice(company.getPrice().multiply(new BigDecimal(order.getAmount())));
-        wallet.setBalance(wallet.getBalance().add(order.getTotalPrice()));
         order.setWallet(wallet);
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        processOrder(savedOrder);
+        return savedOrder;
+    }
+
+    private void processOrder (Order order) {
+        CompletableFuture
+                .supplyAsync(() -> walletStockPersistenceService.processOrder(order))
+                .whenComplete((result, ex) -> {
+                    if (null != ex) {
+                        order.setStatus(CANCELLED);
+                    } else {
+                        order.setStatus(OK);
+                    }
+                    orderRepository.save(order);
+                });
     }
 }
