@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import static com.inter.desafiointer.domain.CompanyStatus.ACTIVE;
 
 @Entity
-@Table(name = "COMPANY")
+@Table(name = "TB_COMPANY")
 public class Company implements Serializable {
 
     @Id

@@ -1,16 +1,21 @@
 package com.inter.desafiointer.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "B_ORDER")
+@Table(name = "TB_ORDER")
 public class Order implements Serializable {
 
     @Id
@@ -21,10 +26,20 @@ public class Order implements Serializable {
     @Column(name = "ORDER_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderType type;
-    @Column(name = "CODE", nullable = false)
-    private String code;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    private Company company;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "WALLET_ID")
+    private Wallet wallet;
     @Column(name = "AMOUNT", nullable = false)
     private int amount;
+    @Column(name = "UNIT_PRICE", nullable = false)
+    private BigDecimal unitPrice;
+    @Column(name = "TOTAL_PRICE", nullable = false)
+    private BigDecimal totalPrice;
+
+    private transient String code;
 
     public String getId() {
         return id;
@@ -50,12 +65,20 @@ public class Order implements Serializable {
         this.type = type;
     }
 
-    public String getCode() {
-        return code;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 
     public int getAmount() {
@@ -64,5 +87,29 @@ public class Order implements Serializable {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

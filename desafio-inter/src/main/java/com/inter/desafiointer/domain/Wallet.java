@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "WALLET")
+@Table(name = "TB_WALLET")
 public class Wallet implements Serializable {
 
     @Id
