@@ -40,4 +40,36 @@ public class CompanyCreateDTO implements Serializable {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    public static class Builder {
+
+        private final CompanyCreateDTO company;
+
+        private Builder() {
+            company = new CompanyCreateDTO();
+        }
+
+        public static Builder of () {
+            return new Builder();
+        }
+
+        public Builder name (String name) {
+            company.name = name;
+            return this;
+        }
+
+        public Builder code (String code) {
+            company.code = code;
+            return this;
+        }
+
+        public Builder price (BigDecimal price) {
+            company.price = price;
+            return this;
+        }
+
+        public CompanyCreateDTO build () {
+            return company;
+        }
+    }
 }

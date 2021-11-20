@@ -15,6 +15,7 @@ public class OrderMapper {
 
     public static Order createDtoToEntity(OrderCreateDTO orderCreateDTO) {
         Order order = mapper.map(orderCreateDTO, Order.class);
+        order.setId(null);
         order.setWallet(WalletBuilder.of()
                 .id(orderCreateDTO.getWalletId())
                 .build());

@@ -14,6 +14,8 @@ public class UserResponseListDTO implements Serializable {
     @ApiModelProperty("List of users")
     private List<UserResponseDTO> users;
 
+    public UserResponseListDTO() { }
+
     public UserResponseListDTO(List<UserResponseDTO> users) {
         this.users = users;
     }

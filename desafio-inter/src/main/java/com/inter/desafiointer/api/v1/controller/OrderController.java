@@ -14,7 +14,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +39,6 @@ public class OrderController {
     @ApiOperation(value = "Return all orders")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Request responses OK"),
-            @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server error"),
     })
     @GetMapping(produces="application/json")
@@ -49,6 +47,19 @@ public class OrderController {
             @RequestParam(value = "code", required = false) String code) {
         return ResponseEntity.ok(new OrderResponseListDTO(
                 OrderMapper.entitiesToDTOs(orderSearchService.find(code))));
+    }
+
+    @ApiOperation(value = "Return order by id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Request responses OK"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Server error"),
+    })
+    @GetMapping(path = "/{id}", produces="application/json")
+    public ResponseEntity<OrderResponseDTO> findById (
+            @ApiParam(value = "Company code for search")
+            @PathVariable(value = "id") String id) {
+        return ResponseEntity.ok(OrderMapper.entityToDTO(orderSearchService.findById(id)));
     }
 
     @ApiOperation(value = "Create order")

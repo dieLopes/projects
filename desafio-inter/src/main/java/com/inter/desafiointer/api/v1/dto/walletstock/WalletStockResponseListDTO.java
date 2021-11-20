@@ -13,6 +13,8 @@ public class WalletStockResponseListDTO implements Serializable {
     @ApiModelProperty("List of stocks")
     private List<WalletStockResponseDTO> stocks;
 
+    public WalletStockResponseListDTO() { }
+
     public WalletStockResponseListDTO(List<WalletStockResponseDTO> stocks) {
         this.stocks = stocks;
     }

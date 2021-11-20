@@ -1,9 +1,11 @@
 package com.inter.desafiointer.api.v1.dto.company;
 
+import com.inter.desafiointer.api.v1.dto.user.UserCreateDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @ApiModel(value = "CompanyUpdate")
 public class CompanyUpdateDTO implements Serializable {
@@ -14,7 +16,7 @@ public class CompanyUpdateDTO implements Serializable {
     @ApiModelProperty(value = "Company code", required = true)
     private String code;
     @ApiModelProperty(value = "Company price", required = true)
-    private String price;
+    private BigDecimal price;
     @ApiModelProperty(value = "Company status", required = true)
     private String status;
 
@@ -34,11 +36,11 @@ public class CompanyUpdateDTO implements Serializable {
         this.code = code;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -48,5 +50,42 @@ public class CompanyUpdateDTO implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public static class Builder {
+
+        private final CompanyUpdateDTO company;
+
+        private Builder() {
+            company = new CompanyUpdateDTO();
+        }
+
+        public static Builder of () {
+            return new Builder();
+        }
+
+        public Builder name (String name) {
+            company.name = name;
+            return this;
+        }
+
+        public Builder code (String code) {
+            company.code = code;
+            return this;
+        }
+
+        public Builder price (BigDecimal price) {
+            company.price = price;
+            return this;
+        }
+
+        public Builder status (String status) {
+            company.status = status;
+            return this;
+        }
+
+        public CompanyUpdateDTO build () {
+            return company;
+        }
     }
 }

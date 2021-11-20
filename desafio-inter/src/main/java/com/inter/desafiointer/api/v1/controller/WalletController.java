@@ -1,8 +1,10 @@
 package com.inter.desafiointer.api.v1.controller;
 
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseListDTO;
+import com.inter.desafiointer.api.v1.dto.wallet.WalletResponseDTO;
 import com.inter.desafiointer.api.v1.dto.walletstock.WalletStockResponseListDTO;
 import com.inter.desafiointer.api.v1.mapper.OrderMapper;
+import com.inter.desafiointer.api.v1.mapper.WalletMapper;
 import com.inter.desafiointer.api.v1.mapper.WalletStockMapper;
 import com.inter.desafiointer.service.WalletSearchService;
 import io.swagger.annotations.Api;
@@ -26,6 +28,19 @@ public class WalletController {
 
     public WalletController(WalletSearchService walletSearchService) {
         this.walletSearchService = walletSearchService;
+    }
+
+    @ApiOperation(value = "Return all wallet orders")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Request responses OK"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Server error"),
+    })
+    @GetMapping(path = "/{id}", produces="application/json")
+    public ResponseEntity<WalletResponseDTO> find (
+            @ApiParam(value = "Wallet id", required = true)
+            @NonNull @PathVariable(value = "id") String id) {
+        return ResponseEntity.ok(WalletMapper.entityToDTO(walletSearchService.findById(id)));
     }
 
     @ApiOperation(value = "Return all wallet orders")

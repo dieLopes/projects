@@ -1,7 +1,6 @@
 package com.inter.desafiointer.api.v1.mapper;
 
 import com.inter.desafiointer.api.v1.dto.company.CompanyCreateDTO;
-import com.inter.desafiointer.api.v1.dto.company.CompanyCreateListDTO;
 import com.inter.desafiointer.api.v1.dto.company.CompanyResponseDTO;
 import com.inter.desafiointer.api.v1.dto.company.CompanyUpdateDTO;
 import com.inter.desafiointer.domain.Company;
@@ -24,14 +23,6 @@ public class CompanyMapper {
 
     public static CompanyResponseDTO entityToDTO(Company company) {
         return mapper.map(company, CompanyResponseDTO.class);
-    }
-
-    public static List<Company> dtosToEntities (CompanyCreateListDTO companyCreateListDTO) {
-        return companyCreateListDTO
-                .getCompanies()
-                .stream()
-                .map(CompanyMapper::createDtoToEntity)
-                .collect(Collectors.toList());
     }
 
     public static List<CompanyResponseDTO> entitiesToDTOs (List<Company> companies) {

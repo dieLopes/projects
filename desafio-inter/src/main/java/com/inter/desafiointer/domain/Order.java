@@ -14,8 +14,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static com.inter.desafiointer.domain.OrderStatus.OK;
-import static com.inter.desafiointer.domain.OrderStatus.WAITING;
+import static com.inter.desafiointer.domain.OrderStatus.PENDING;
 
 @Entity
 @Table(name = "TB_ORDER")
@@ -44,7 +43,7 @@ public class Order implements Serializable {
     private BigDecimal totalPrice;
     @Column(name = "STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderStatus status = WAITING;
+    private OrderStatus status = PENDING;
 
     private transient String code;
 

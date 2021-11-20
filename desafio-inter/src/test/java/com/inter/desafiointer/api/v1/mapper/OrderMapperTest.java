@@ -1,0 +1,90 @@
+package com.inter.desafiointer.api.v1.mapper;
+
+import com.inter.desafiointer.api.v1.dto.order.OrderCreateDTO;
+import com.inter.desafiointer.api.v1.dto.order.OrderResponseDTO;
+import com.inter.desafiointer.builder.CompanyBuilder;
+import com.inter.desafiointer.builder.OrderBuilder;
+import com.inter.desafiointer.builder.WalletBuilder;
+import com.inter.desafiointer.domain.Order;
+import com.inter.desafiointer.domain.OrderStatus;
+import com.inter.desafiointer.domain.OrderType;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.inter.desafiointer.domain.OrderStatus.OK;
+import static com.inter.desafiointer.domain.OrderStatus.PENDING;
+import static com.inter.desafiointer.domain.OrderType.BUY;
+import static com.inter.desafiointer.domain.OrderType.SELL;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+
+public class OrderMapperTest {
+
+    @Test
+    public void whenConvertCreateDTOToEntityThenReturn () {
+        OrderCreateDTO orderCreateDTO = OrderCreateDTO.Builder.of()
+                .amount(5)
+                .type(BUY.toString())
+                .code("SOME4")
+                .walletId("some-wallet-id")
+                .build();
+        Order order = OrderMapper.createDtoToEntity(orderCreateDTO);
+        assertThat(order.getId()).isNullOrEmpty();
+        assertThat(order.getAmount()).isEqualTo(5);
+        assertThat(order.getType()).isEqualTo(BUY);
+        assertThat(order.getCode()).isEqualTo("SOME4");
+        assertThat(order.getWallet().getId()).isEqualTo("some-wallet-id");
+    }
+
+    @Test
+    public void whenConvertEntityToDTOThenReturn () {
+        Order order = createOrder("some-id", PENDING, BUY);
+        OrderResponseDTO orderResponseDTO = OrderMapper.entityToDTO(order);
+        assertThat(orderResponseDTO.getId()).isEqualTo(order.getId());
+        assertThat(orderResponseDTO.getAmount()).isEqualTo(order.getAmount());
+        assertThat(orderResponseDTO.getCompanyCode()).isEqualTo(order.getCompany().getCode());
+        assertThat(orderResponseDTO.getWalletId()).isEqualTo(order.getWallet().getId());
+        assertThat(orderResponseDTO.getStatus()).isEqualTo(order.getStatus().toString());
+        assertThat(orderResponseDTO.getDate()).isEqualTo(order.getDate());
+        assertThat(orderResponseDTO.getType()).isEqualTo(order.getType().toString());
+        assertThat(orderResponseDTO.getUnitPrice()).isEqualTo(order.getUnitPrice());
+        assertThat(orderResponseDTO.getTotalPrice()).isEqualTo(order.getTotalPrice());
+    }
+
+    @Test
+    public void whenConvertEntitiesToListDTOThenReturn () {
+        List<Order> orders = List.of(
+                createOrder("some-id", PENDING, BUY),
+                createOrder("another-id", OK, SELL));
+        List<OrderResponseDTO> orderResponseDTOS = OrderMapper.entitiesToDTOs(orders);
+        assertThat(orderResponseDTOS).hasSize(2)
+                .extracting(OrderResponseDTO::getId,
+                        OrderResponseDTO::getStatus,
+                        OrderResponseDTO::getType)
+                .containsExactlyInAnyOrder(
+                        tuple("some-id", PENDING.toString(), BUY.toString()),
+                        tuple("another-id", OK.toString(), SELL.toString())
+                );
+    }
+
+    private Order createOrder (String id, OrderStatus status, OrderType type) {
+        return OrderBuilder.of()
+                .id(id)
+                .amount(5)
+                .company(CompanyBuilder.of()
+                        .code("SOME4")
+                        .build())
+                .wallet(WalletBuilder.of()
+                        .id("wallet-id")
+                        .build())
+                .status(status)
+                .date(LocalDateTime.now())
+                .type(type)
+                .unitPrice(new BigDecimal(10))
+                .totalPrice(new BigDecimal(50))
+                .build();
+    }
+}

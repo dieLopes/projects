@@ -13,6 +13,8 @@ public class CompanyResponseListDTO implements Serializable {
     @ApiModelProperty("List of companies")
     private List<CompanyResponseDTO> companies;
 
+    public CompanyResponseListDTO() { }
+
     public CompanyResponseListDTO(List<CompanyResponseDTO> companies) {
         this.companies = companies;
     }

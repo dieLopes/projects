@@ -1,6 +1,5 @@
 package com.inter.desafiointer.api.v1.dto.order;
 
-import com.inter.desafiointer.domain.OrderType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -17,7 +16,7 @@ public class OrderResponseDTO implements Serializable {
     @ApiModelProperty("Order date")
     private LocalDateTime date;
     @ApiModelProperty("Order type")
-    private OrderType type;
+    private String type;
     @ApiModelProperty("Amount company shares")
     private int amount;
     @ApiModelProperty("Unit price of the company's share")
@@ -47,11 +46,11 @@ public class OrderResponseDTO implements Serializable {
         this.date = date;
     }
 
-    public OrderType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(OrderType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

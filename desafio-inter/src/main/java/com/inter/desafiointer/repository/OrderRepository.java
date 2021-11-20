@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, String> {
 
-    // TODO: Verificar pq não esta funcionando sem o filtro
     @Query("select o from Order o where (:code is null or o.company.code = :code)")
     List<Order> find(@Param("code") String code);
 

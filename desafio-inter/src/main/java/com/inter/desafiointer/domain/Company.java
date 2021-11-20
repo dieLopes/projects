@@ -25,7 +25,7 @@ public class Company implements Serializable {
     private String code;
     @Column(name = "PRICE", nullable = false)
     private BigDecimal price;
-    @Column(name = "ACTIVE", nullable = false)
+    @Column(name = "STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private CompanyStatus status = ACTIVE;
 

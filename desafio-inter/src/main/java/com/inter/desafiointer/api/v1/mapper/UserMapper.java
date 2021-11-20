@@ -2,7 +2,6 @@ package com.inter.desafiointer.api.v1.mapper;
 
 import com.inter.desafiointer.api.v1.dto.user.UserCreateDTO;
 import com.inter.desafiointer.api.v1.dto.user.UserResponseDTO;
-import com.inter.desafiointer.api.v1.dto.user.UserUpdateDTO;
 import com.inter.desafiointer.domain.User;
 import org.modelmapper.ModelMapper;
 
@@ -15,10 +14,6 @@ public class UserMapper {
 
     public static User createDtoToEntity(UserCreateDTO userCreateDTO) {
         return mapper.map(userCreateDTO, User.class);
-    }
-
-    public static User updateDtoToEntity (UserUpdateDTO userUpdateDTO) {
-        return mapper.map(userUpdateDTO, User.class);
     }
 
     public static UserResponseDTO entityToDTO(User user) {

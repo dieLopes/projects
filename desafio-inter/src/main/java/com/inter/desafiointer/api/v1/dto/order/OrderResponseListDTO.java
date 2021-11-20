@@ -13,6 +13,8 @@ public class OrderResponseListDTO implements Serializable {
     @ApiModelProperty("List of orders")
     private List<OrderResponseDTO> orders;
 
+    public OrderResponseListDTO() { }
+
     public OrderResponseListDTO(List<OrderResponseDTO> orders) {
         this.orders = orders;
     }

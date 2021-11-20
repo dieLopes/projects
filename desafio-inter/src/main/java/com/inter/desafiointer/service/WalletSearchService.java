@@ -2,6 +2,7 @@ package com.inter.desafiointer.service;
 
 import com.inter.desafiointer.builder.WalletBuilder;
 import com.inter.desafiointer.domain.Order;
+import com.inter.desafiointer.domain.Wallet;
 import com.inter.desafiointer.domain.WalletStock;
 import com.inter.desafiointer.exception.NotFoundException;
 import com.inter.desafiointer.repository.OrderRepository;
@@ -26,17 +27,20 @@ public class WalletSearchService {
         this.walletStockRepository = walletStockRepository;
     }
 
-    public List<Order> findOrders(String id) {
-        walletRepository.findById(id)
+    public Wallet findById(String id) {
+        return walletRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Wallet not found"));
+    }
+
+    public List<Order> findOrders(String id) {
+       findById(id);
         return orderRepository.findByWallet(WalletBuilder.of()
                 .id(id)
                 .build());
     }
 
     public List<WalletStock> findShares(String id) {
-        walletRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Wallet not found"));
+        findById(id);
         return walletStockRepository.findByWallet(WalletBuilder.of()
                 .id(id)
                 .build());

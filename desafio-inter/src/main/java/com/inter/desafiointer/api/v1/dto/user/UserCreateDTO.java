@@ -19,4 +19,26 @@ public class UserCreateDTO implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static class Builder {
+
+        private final UserCreateDTO user;
+
+        private Builder() {
+            user = new UserCreateDTO();
+        }
+
+        public static Builder of () {
+            return new Builder();
+        }
+
+        public Builder name (String name) {
+            user.name = name;
+            return this;
+        }
+
+        public UserCreateDTO build () {
+            return user;
+        }
+    }
 }

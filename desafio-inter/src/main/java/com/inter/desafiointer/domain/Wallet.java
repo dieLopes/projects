@@ -22,7 +22,6 @@ public class Wallet implements Serializable {
     @Column(name = "BALANCE", nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
 
-
     public String getId() {
         return id;
     }

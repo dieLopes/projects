@@ -41,10 +41,10 @@ public class WalletStockPersistenceService {
 
     private CompletableFuture<WalletStock> processBuyOrder (Order order) {
         AtomicReference<WalletStock> walletStock = new AtomicReference<>();
-        walletStockRepository.findByCompanyCode(order.getCompany().getCode()).ifPresentOrElse(share -> {
-            share.setAmount(share.getAmount() + order.getAmount());
-            share.setBalance(share.getBalance().add(order.getTotalPrice()));
-            walletStock.set(update(share));
+        walletStockRepository.findByCompanyCode(order.getCompany().getCode()).ifPresentOrElse(stock -> {
+            stock.setAmount(stock.getAmount() + order.getAmount());
+            stock.setBalance(stock.getBalance().add(order.getTotalPrice()));
+            walletStock.set(update(stock));
         }, () ->
                 walletStock.set(save(WalletStockBuilder.of()
                         .companyCode(order.getCompany().getCode())
