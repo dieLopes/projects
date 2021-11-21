@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,7 +48,7 @@ public class CompanyPersistenceServiceTest {
         assertThatThrownBy(() ->  companyPersistenceService.save(company))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("Name is mandatory");
-        verifyNoMoreInteractions(companyRepository);
+        verifyZeroInteractions(companyRepository);
     }
 
     @Test
@@ -56,7 +57,7 @@ public class CompanyPersistenceServiceTest {
         assertThatThrownBy(() ->  companyPersistenceService.save(company))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("Code is mandatory");
-        verifyNoMoreInteractions(companyRepository);
+        verifyZeroInteractions(companyRepository);
     }
 
     @Test
@@ -66,7 +67,7 @@ public class CompanyPersistenceServiceTest {
         assertThatThrownBy(() ->  companyPersistenceService.save(company))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("Price is mandatory");
-        verifyNoMoreInteractions(companyRepository);
+        verifyZeroInteractions(companyRepository);
     }
 
     @Test

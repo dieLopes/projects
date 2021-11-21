@@ -66,6 +66,11 @@ public class OrderBuilder {
         return this;
     }
 
+    public OrderBuilder code (String code) {
+        order.setCode(code);
+        return this;
+    }
+
     public Order build () {
         return order;
     }

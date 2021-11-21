@@ -44,6 +44,7 @@ public class OrderPersistenceService {
     }
 
     public Order save (Order order) {
+        validateFields(order);
         Company company = companyRepository.findByCodeAndStatus(order.getCode(), ACTIVE)
                 .orElseThrow(() -> new BadRequestException("Company not found with code " + order.getCode()));
         Wallet wallet = walletRepository.findById(order.getWallet().getId())
@@ -59,10 +60,22 @@ public class OrderPersistenceService {
         return savedOrder;
     }
 
+    private void validateFields (Order order) {
+        if (order.getAmount() <= 0 ) {
+            throw new BadRequestException("Amount should be greater than 0");
+        }
+        if (order.getCode() == null || order.getCode().isEmpty()) {
+            throw new BadRequestException("Code is invalid");
+        }
+    }
+
     public List<Order> createRandomOrders (String walletId, BigDecimal total) {
         Wallet wallet = walletRepository.findById(walletId)
                 .orElseThrow(() -> new BadRequestException("Wallet not found with id " + walletId));
         List<Company> comps = companyRepository.findByStatusOrderByPriceAsc(ACTIVE);
+        if (comps.isEmpty()) {
+            throw new BadRequestException("There aren't companies to buy");
+        }
 
         AtomicReference<BigDecimal> allocated = new AtomicReference<>(BigDecimal.ZERO);
         AtomicReference<BigDecimal> change = new AtomicReference<>(total);

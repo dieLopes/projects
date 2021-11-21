@@ -29,6 +29,7 @@ public class OrderBuilderTest {
                 .type(BUY)
                 .unitPrice(new BigDecimal(10))
                 .totalPrice(new BigDecimal(50))
+                .code("SOME4")
                 .build();
         assertThat(order.getId()).isEqualTo("some-id");
         assertThat(order.getAmount()).isEqualTo(5);
@@ -39,5 +40,6 @@ public class OrderBuilderTest {
         assertThat(order.getType()).isEqualTo(BUY);
         assertThat(order.getUnitPrice()).isEqualTo(new BigDecimal(10));
         assertThat(order.getTotalPrice()).isEqualTo(new BigDecimal(50));
+        assertThat(order.getCode()).isEqualTo("SOME4");
     }
 }
