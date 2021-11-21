@@ -37,7 +37,7 @@ public class WalletSearchService {
     }
 
     public List<Order> findOrders(String id) {
-       findById(id);
+        findById(id);
         return orderRepository.findByWallet(WalletBuilder.of()
                 .id(id)
                 .build());
