@@ -13,8 +13,10 @@ public class OrderRandomCreateDTOTest {
         OrderRandomCreateDTO orderCreateDTO = OrderRandomCreateDTO.Builder.of()
                 .total(new BigDecimal(100))
                 .cpf("11111111111")
+                .amount(5)
                 .build();
         assertThat(orderCreateDTO.getTotal()).isEqualTo(new BigDecimal(100));
         assertThat(orderCreateDTO.getCpf()).isEqualTo("11111111111");
+        assertThat(orderCreateDTO.getAmount()).isEqualTo(5);
     }
 }

@@ -149,14 +149,15 @@ public class OrderControllerIT extends BaseIT {
         OrderRandomCreateDTO orderRandomCreateDTO = OrderRandomCreateDTO.Builder.of()
                 .total(new BigDecimal(100))
                 .cpf(cpf)
+                .amount(3)
                 .build();
         OrderResponseRandomDTO list = restTemplate.postForEntity(
                 "http://localhost:" + port + ORDER_PATH + "/random",
                 orderRandomCreateDTO, OrderResponseRandomDTO.class).getBody();
         assertNotNull(Objects.requireNonNull(list).getOrders());
-        assertEquals(4, list.getOrders().size());
-        assertEquals(new BigDecimal("99.33"), list.getTotal());
-        assertEquals(new BigDecimal("0.67"), list.getChange());
+        assertEquals(3, list.getOrders().size());
+        assertEquals(new BigDecimal("98.24"), list.getTotal());
+        assertEquals(new BigDecimal("1.76"), list.getChange());
     }
 
     @Test
@@ -164,16 +165,35 @@ public class OrderControllerIT extends BaseIT {
         patchCompany("marisa-id", INACTIVE);
         String cpf = getUserCpf();
         OrderRandomCreateDTO orderRandomCreateDTO = OrderRandomCreateDTO.Builder.of()
-                .total(new BigDecimal(100))
+                .total(new BigDecimal(1000))
                 .cpf(cpf)
+                .amount(5)
                 .build();
         OrderResponseRandomDTO list = restTemplate.postForEntity(
                 "http://localhost:" + port + ORDER_PATH + "/random",
                 orderRandomCreateDTO, OrderResponseRandomDTO.class).getBody();
         assertNotNull(Objects.requireNonNull(list).getOrders());
-        assertEquals(3, list.getOrders().size());
-        assertEquals(new BigDecimal("86.73"), list.getTotal());
-        assertEquals(new BigDecimal("13.27"), list.getChange());
+        assertEquals(5, list.getOrders().size());
+        assertEquals(new BigDecimal("982.76"), list.getTotal());
+        assertEquals(new BigDecimal("17.24"), list.getChange());
+        patchCompany("marisa-id", ACTIVE);
+    }
+
+    @Test
+    public void whenCreateARandomOrderInsufficientFundsAndThenReturnOrders() {
+        String cpf = getUserCpf();
+        OrderRandomCreateDTO orderRandomCreateDTO = OrderRandomCreateDTO.Builder.of()
+                .total(new BigDecimal(10))
+                .cpf(cpf)
+                .amount(5)
+                .build();
+        OrderResponseRandomDTO list = restTemplate.postForEntity(
+                "http://localhost:" + port + ORDER_PATH + "/random",
+                orderRandomCreateDTO, OrderResponseRandomDTO.class).getBody();
+        assertNotNull(Objects.requireNonNull(list).getOrders());
+        assertEquals(1, list.getOrders().size());
+        assertEquals(new BigDecimal("6.30"), list.getTotal());
+        assertEquals(new BigDecimal("3.70"), list.getChange());
     }
 
     private OrderResponseDTO createOrder (String type, String code, int amount, String cpf) {

@@ -10,10 +10,12 @@ import java.math.BigDecimal;
 public class OrderRandomCreateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty("List of orders")
+    @ApiModelProperty("User cpf")
     private String cpf;
     @ApiModelProperty("Total for orders")
     private BigDecimal total;
+    @ApiModelProperty("Amount for companies")
+    private int amount;
 
     public String getCpf() {
         return cpf;
@@ -29,6 +31,14 @@ public class OrderRandomCreateDTO implements Serializable {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public static class Builder {
@@ -50,6 +60,11 @@ public class OrderRandomCreateDTO implements Serializable {
 
         public Builder total (BigDecimal total) {
             order.total = total;
+            return this;
+        }
+
+        public Builder amount (int amount) {
+            order.amount = amount;
             return this;
         }
 

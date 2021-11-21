@@ -2,6 +2,7 @@ package com.inter.desafiointer.repository;
 
 import com.inter.desafiointer.domain.Company;
 import com.inter.desafiointer.domain.CompanyStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,5 +18,5 @@ public interface CompanyRepository extends JpaRepository<Company, String> {
 
     Optional<Company> findByCodeAndStatus(String code, CompanyStatus status);
 
-    List<Company> findByStatusOrderByPriceAsc(CompanyStatus active);
+    List<Company> findByStatusOrderByPriceAsc(CompanyStatus status, Pageable pageable);
 }

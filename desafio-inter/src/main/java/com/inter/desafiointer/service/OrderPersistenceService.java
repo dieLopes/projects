@@ -8,6 +8,7 @@ import com.inter.desafiointer.exception.BadRequestException;
 import com.inter.desafiointer.repository.CompanyRepository;
 import com.inter.desafiointer.repository.OrderRepository;
 import com.inter.desafiointer.repository.WalletRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -69,14 +70,13 @@ public class OrderPersistenceService {
         }
     }
 
-    public List<Order> createRandomOrders (String cpf, BigDecimal total) {
+    public List<Order> createRandomOrders (String cpf, BigDecimal total, int amount) {
         Wallet wallet = walletRepository.findByUserCpf(cpf)
                 .orElseThrow(() -> new BadRequestException("Wallet not found for user " + cpf));
-        List<Company> comps = companyRepository.findByStatusOrderByPriceAsc(ACTIVE);
+        List<Company> comps = companyRepository.findByStatusOrderByPriceAsc(ACTIVE, Pageable.ofSize(amount));
         if (comps.isEmpty()) {
             throw new BadRequestException("There aren't companies to buy");
         }
-
         AtomicReference<BigDecimal> allocated = new AtomicReference<>(BigDecimal.ZERO);
         AtomicReference<BigDecimal> change = new AtomicReference<>(total);
         AtomicReference<BigDecimal> minPrice = new AtomicReference<>(comps.get(0).getPrice());

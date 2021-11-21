@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -127,17 +128,17 @@ public class OrderPersistenceServiceTest {
     @Test
     public void whenCreateRandomOrdersThenSaveAListOfOrders () throws InterruptedException {
         when(walletRepository.findByUserCpf(eq("11111111111"))).thenReturn(Optional.of(buildWallet()));
-        when(companyRepository.findByStatusOrderByPriceAsc(eq(ACTIVE))).thenReturn(companies);
+        when(companyRepository.findByStatusOrderByPriceAsc(eq(ACTIVE), eq(Pageable.ofSize(5)))).thenReturn(companies);
         List<Order> orders = new ArrayList<>();
         while (orders.size() < 4) {
             orders.add(buildOrder(5));
         }
         when(walletStockPersistenceService.processOrder(anyList()))
                 .thenReturn(CompletableFuture.completedFuture(orders));
-        orderPersistenceService.createRandomOrders("11111111111", new BigDecimal("100.00"));
+        orderPersistenceService.createRandomOrders("11111111111", new BigDecimal("100.00"), 5);
         Thread.sleep(500);
         verify(walletRepository).findByUserCpf(eq("11111111111"));
-        verify(companyRepository).findByStatusOrderByPriceAsc(eq(ACTIVE));
+        verify(companyRepository).findByStatusOrderByPriceAsc(eq(ACTIVE), eq(Pageable.ofSize(5)));
         verify(orderRepository, times(8)).save(any(Order.class));
         verify(walletStockPersistenceService).processOrder(anyList());
         verifyNoMoreInteractions(walletRepository, companyRepository, orderRepository, walletStockPersistenceService);
@@ -146,12 +147,12 @@ public class OrderPersistenceServiceTest {
     @Test
     public void whenCreateRandomOrderButInactiveCompaniesThenReturnBadRequest () {
         when(walletRepository.findByUserCpf(eq("11111111111"))).thenReturn(Optional.of(buildWallet()));
-        when(companyRepository.findByStatusOrderByPriceAsc(eq(ACTIVE))).thenReturn(List.of());
-        assertThatThrownBy(() -> orderPersistenceService.createRandomOrders("11111111111", BigDecimal.TEN))
+        when(companyRepository.findByStatusOrderByPriceAsc(eq(ACTIVE), eq(Pageable.ofSize(5)))).thenReturn(List.of());
+        assertThatThrownBy(() -> orderPersistenceService.createRandomOrders("11111111111", BigDecimal.TEN, 5))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("There aren't companies to buy");
         verify(walletRepository).findByUserCpf(eq("11111111111"));
-        verify(companyRepository).findByStatusOrderByPriceAsc(eq(ACTIVE));
+        verify(companyRepository).findByStatusOrderByPriceAsc(eq(ACTIVE), eq(Pageable.ofSize(5)));
         verifyNoMoreInteractions(walletRepository, companyRepository);
         verifyZeroInteractions(walletStockPersistenceService, orderRepository);
     }
@@ -159,7 +160,7 @@ public class OrderPersistenceServiceTest {
     @Test
     public void whenCreateRandomOrderInvalidWalletThenReturnBadRequest () {
         when(walletRepository.findByUserCpf(eq("11111111111"))).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> orderPersistenceService.createRandomOrders("11111111111", BigDecimal.TEN))
+        assertThatThrownBy(() -> orderPersistenceService.createRandomOrders("11111111111", BigDecimal.TEN, 5))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("Wallet not found for user 11111111111");
         verify(walletRepository).findByUserCpf(eq("11111111111"));

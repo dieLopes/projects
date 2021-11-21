@@ -86,10 +86,10 @@ public class OrderController {
     })
     @PostMapping(path = "/random", produces="application/json", consumes="application/json")
     public ResponseEntity<OrderResponseRandomDTO> create (
-            @RequestBody OrderRandomCreateDTO orderRandomCreateDTO) {
-        List<Order> orders = orderPersistenceService.createRandomOrders(orderRandomCreateDTO.getCpf(),
-                orderRandomCreateDTO.getTotal());
-        return new ResponseEntity<>(OrderMapper.entitiesListToDTO(orders, orderRandomCreateDTO.getTotal()),
+            @RequestBody OrderRandomCreateDTO orderDTO) {
+        List<Order> orders = orderPersistenceService.createRandomOrders(orderDTO.getCpf(),
+                orderDTO.getTotal(), orderDTO.getAmount());
+        return new ResponseEntity<>(OrderMapper.entitiesListToDTO(orders, orderDTO.getTotal()),
                 HttpStatus.CREATED);
     }
 }

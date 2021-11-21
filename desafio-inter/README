@@ -87,7 +87,7 @@ Ao criar o usuário, o sistema irá criar uma carteira para o usuário automatic
 usuários com suas ações. O CPF do usuário será necessário para a execução de orders de compra e venda de
 ações além de ser necessária para a compra de ações em lote e visualização das informações da carteira.
 
-####### ORDEM DE COMPRA, VENDA E EM LOTE #######
+####### ORDEM DE COMPRA, VENDA #######
 
 Para realizar um ordem de compra ou de venda é necessário informar além do CPF do usuário, o código da empresa, o tipo
 da operação (BUY ou SELL) e a quantidade de ações.
@@ -111,10 +111,13 @@ GET http://localhost:8080/broker/api/v1/orders?code={CODIGO_DA_EMPRESA}
 http://localhost:8080/broker/swagger-ui.html#/Order%20Service/findByIdUsingGET
 GET http://localhost:8080/broker/api/v1/orders/{ID_DA_ORDEM}
 
-Também é possível informar apenas o ID da carteira e um valor e deixar que o sistema selecione ações para a sua carteira
-de forma automática. Osistema começará selecionando as ações de menor valor disponíveis para que sejá possível
-diversificar mais a carteira e no final da operação mostrará no retorno o total que foi utilizado, o valor não utilizado
-e a lista de ordens abertas para a compra das ações. Cada ação selecionada irá gerar uma ordem de comrpa separada.
+####### ORDEM DE COMPRA EM LOTE #######
+
+Também é possível informar apenas o CPF, o valor desejado para investir e a quantidade de ativos e deixar que o sistema
+selecione ações para a sua carteira de forma automática. O sistema começará selecionando as ações de menor valor
+disponíveis para que sejá possível diversificar mais a carteira e no final da operação mostrará no retorno o total que
+foi utilizado, o valor não utilizado (troco) e a lista de ordens abertas para a compra das ações. Cada ação selecionada
+irá gerar uma ordem de compra separada.
 
 - Comprar ações em lote:
 http://localhost:8080/broker/swagger-ui.html#/Order%20Service/createUsingPOST_1
