@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static com.inter.desafiointer.domain.CompanyStatus.ACTIVE;
 import static com.inter.desafiointer.domain.OrderStatus.PENDING;
 import static com.inter.desafiointer.domain.OrderType.BUY;
 
@@ -43,7 +44,7 @@ public class OrderPersistenceService {
     }
 
     public Order save (Order order) {
-        Company company = companyRepository.findByCode(order.getCode())
+        Company company = companyRepository.findByCodeAndStatus(order.getCode(), ACTIVE)
                 .orElseThrow(() -> new BadRequestException("Company not found with code " + order.getCode()));
         Wallet wallet = walletRepository.findById(order.getWallet().getId())
                 .orElseThrow(() -> new BadRequestException("Wallet not found with id " + order.getWallet().getId()));
@@ -61,7 +62,7 @@ public class OrderPersistenceService {
     public List<Order> createRandomOrders (String walletId, BigDecimal total) {
         Wallet wallet = walletRepository.findById(walletId)
                 .orElseThrow(() -> new BadRequestException("Wallet not found with id " + walletId));
-        List<Company> comps = companyRepository.findAllByOrderByPriceAsc();
+        List<Company> comps = companyRepository.findByStatusOrderByPriceAsc(ACTIVE);
 
         AtomicReference<BigDecimal> allocated = new AtomicReference<>(BigDecimal.ZERO);
         AtomicReference<BigDecimal> change = new AtomicReference<>(total);

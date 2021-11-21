@@ -5,7 +5,7 @@ import com.inter.desafiointer.api.v1.dto.order.OrderCreateDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderRandomCreateDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseListDTO;
-import com.inter.desafiointer.api.v1.dto.order.OrderResponseRandomListDTO;
+import com.inter.desafiointer.api.v1.dto.order.OrderResponseRandomDTO;
 import com.inter.desafiointer.api.v1.dto.user.UserCreateDTO;
 import com.inter.desafiointer.api.v1.dto.user.UserResponseDTO;
 import com.inter.desafiointer.api.v1.dto.wallet.WalletResponseDTO;
@@ -108,7 +108,7 @@ public class WalletControllerIT extends BaseIT {
     }
 
     @Test
-    public void whenFindAllWalleaaaaaaatStocksThenReturnStockList() throws InterruptedException {
+    public void whenFindAllWalletStocksRandomBuyThenReturnStockList() throws InterruptedException {
 
         String walletId = getWalletId();
         OrderRandomCreateDTO orderRandomCreateDTO = OrderRandomCreateDTO.Builder.of()
@@ -116,7 +116,7 @@ public class WalletControllerIT extends BaseIT {
                 .walletId(walletId)
                 .build();
         restTemplate.postForEntity("http://localhost:" + port + "/broker/api/v1/orders/random",
-                orderRandomCreateDTO, OrderResponseRandomListDTO.class).getBody();
+                orderRandomCreateDTO, OrderResponseRandomDTO.class).getBody();
         Thread.sleep(2000);
 
         WalletStockResponseListDTO walletStockResponseListDTO = restTemplate.getForObject(

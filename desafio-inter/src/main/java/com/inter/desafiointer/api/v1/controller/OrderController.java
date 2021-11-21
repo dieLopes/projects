@@ -4,7 +4,7 @@ import com.inter.desafiointer.api.v1.dto.order.OrderCreateDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderRandomCreateDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseListDTO;
-import com.inter.desafiointer.api.v1.dto.order.OrderResponseRandomListDTO;
+import com.inter.desafiointer.api.v1.dto.order.OrderResponseRandomDTO;
 import com.inter.desafiointer.api.v1.mapper.OrderMapper;
 import com.inter.desafiointer.domain.Order;
 import com.inter.desafiointer.service.OrderPersistenceService;
@@ -85,7 +85,7 @@ public class OrderController {
             @ApiResponse(code = 500, message = "Server error"),
     })
     @PostMapping(path = "/random", produces="application/json", consumes="application/json")
-    public ResponseEntity<OrderResponseRandomListDTO> create (
+    public ResponseEntity<OrderResponseRandomDTO> create (
             @RequestBody OrderRandomCreateDTO orderRandomCreateDTO) {
         List<Order> orders = orderPersistenceService.createRandomOrders(orderRandomCreateDTO.getWalletId(),
                 orderRandomCreateDTO.getTotal());

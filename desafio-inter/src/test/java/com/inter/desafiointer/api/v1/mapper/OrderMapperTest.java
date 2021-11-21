@@ -2,6 +2,7 @@ package com.inter.desafiointer.api.v1.mapper;
 
 import com.inter.desafiointer.api.v1.dto.order.OrderCreateDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseDTO;
+import com.inter.desafiointer.api.v1.dto.order.OrderResponseRandomDTO;
 import com.inter.desafiointer.builder.CompanyBuilder;
 import com.inter.desafiointer.builder.OrderBuilder;
 import com.inter.desafiointer.builder.WalletBuilder;
@@ -68,6 +69,17 @@ public class OrderMapperTest {
                         tuple("some-id", PENDING.toString(), BUY.toString()),
                         tuple("another-id", OK.toString(), SELL.toString())
                 );
+    }
+
+    @Test
+    public void whenConvertEntitiesToDTOThenReturn () {
+        List<Order> orders = List.of(
+                createOrder("some-id", OK, BUY),
+                createOrder("another-id", OK, BUY));
+        OrderResponseRandomDTO responseDTO = OrderMapper.entitiesListToDTO(orders, new BigDecimal(101));
+        assertThat(responseDTO.getOrders().size()).isEqualTo(2);
+        assertThat(responseDTO.getTotal()).isEqualTo(new BigDecimal(100));
+        assertThat(responseDTO.getChange()).isEqualTo(new BigDecimal(1));
     }
 
     private Order createOrder (String id, OrderStatus status, OrderType type) {

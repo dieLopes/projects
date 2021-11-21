@@ -81,7 +81,6 @@ public class CompanyControllerIT extends BaseIT {
         assertEquals("NEW11", company.getCode());
         assertEquals(BigDecimal.TEN, company.getPrice());
         assertEquals("ACTIVE", company.getStatus());
-
         delete(company.getId());
     }
 
@@ -108,7 +107,6 @@ public class CompanyControllerIT extends BaseIT {
         assertEquals(editedResponseDTO.getCode(), companyUpdateDTO.getCode());
         assertEquals(editedResponseDTO.getPrice(), companyUpdateDTO.getPrice());
         assertEquals(editedResponseDTO.getStatus(), companyUpdateDTO.getStatus());
-
         delete(companyResponseDTO.getId());
     }
 

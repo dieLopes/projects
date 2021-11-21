@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @ApiModel(value = "OrderResponseRandomList")
-public class OrderResponseRandomListDTO implements Serializable {
+public class OrderResponseRandomDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @ApiModelProperty("List of orders")
@@ -18,9 +18,9 @@ public class OrderResponseRandomListDTO implements Serializable {
     @ApiModelProperty("Change")
     private BigDecimal change;
 
-    public OrderResponseRandomListDTO() { }
+    public OrderResponseRandomDTO() { }
 
-    public OrderResponseRandomListDTO(List<OrderResponseDTO> orders) {
+    public OrderResponseRandomDTO(List<OrderResponseDTO> orders) {
         this.orders = orders;
     }
 
