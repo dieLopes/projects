@@ -1,6 +1,43 @@
 ## COMPILAR O PROJETO
 
+O projeto foi desenvolvido em java 11.
+
 Para compilar o projeto, basta executar o comando mvn clean install na raiz do projeto. O comando ja executará todos
-os testes unitários e integrados. Para pular os testes integrados basta adicionar a propriedade -Dskip.integration.tests=true
-no mvn clean install (mvn clean install -Dskip.integration.tests=true).
+os testes unitários e integrados. Para pular os testes integrados basta adicionar a propriedade
+-Dskip.integration.tests=true no mvn clean install.
+
+- mvn clean install -Dskip.integration.tests=true
+
+## SUBINDO A APLICAÇÃO
+
+É possível subir a aplicação em um container Docker. Para isso é necessário:
+- possuir o docker na máquina.
+- executar o comando "docker image build -t broker ." para gerar a imagem da aplicação.
+- executar o comando "docker container run -p 8080:8080 broker".
+
+OBS: A porta 8080 do container está sendo configurada para ser exposta no arquivo Dockerfile na raiz do projeto.
+
+Caso não possua o docker instalado, a aplicação pode ser executada via IDE (executando a classe
+DesafioInterApplication.java) ou via CMD executando o comando "java -jar target/desafio-inter.jar".
+
+## ACESSANDO O CONSOLE H2 (BANCO DE DADOS)
+
+Para visualizar o console h2 caso esteja executando a aplicação localmente (não em um container docker) basta acessar
+a URL:
+- http://localhost:8080/broker/h2-console
+
+Dados para acessar o console:
+- Driver Class: org.h2.Driver
+- JDBC URL: jdbc:h2:mem:brokerdb
+- User Name: sa
+- Password: password
+
+## DOCUMENTAÇÃO SWAGGER
+
+Para visualizar o swagger e ter acesso aos endpoints da aplicação, basta acessar a URL:
+- http://localhost:8080/broker/swagger-ui.html
+
+## REGRAS DE NEGÓCIO
+
+
 
