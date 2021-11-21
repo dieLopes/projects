@@ -19,8 +19,7 @@ public class Wallet implements Serializable {
     private String id;
     @OneToOne(mappedBy = "wallet", fetch = FetchType.LAZY, orphanRemoval = true)
     private User user;
-    @Column(name = "BALANCE", nullable = false)
-    private BigDecimal balance = BigDecimal.ZERO;
+    private transient BigDecimal balance = BigDecimal.ZERO;
 
     public String getId() {
         return id;

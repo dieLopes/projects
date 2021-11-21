@@ -68,6 +68,6 @@ public class WalletController {
             @ApiParam(value = "Wallet id", required = true)
             @NonNull @PathVariable(value = "id") String id) {
         return ResponseEntity.ok(new WalletStockResponseListDTO(
-                WalletStockMapper.entitiesToDTOs(walletSearchService.findShares(id))));
+                WalletStockMapper.entitiesToDTOs(walletSearchService.findStocks(id))));
     }
 }

@@ -10,6 +10,7 @@ import com.inter.desafiointer.repository.WalletRepository;
 import com.inter.desafiointer.repository.WalletStockRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -28,8 +29,11 @@ public class WalletSearchService {
     }
 
     public Wallet findById(String id) {
-        return walletRepository.findById(id)
+        Wallet wallet = walletRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Wallet not found"));
+        BigDecimal balance = walletStockRepository.findWalletBalance(wallet);
+        wallet.setBalance(balance != null ? balance : new BigDecimal("0.00"));
+        return wallet;
     }
 
     public List<Order> findOrders(String id) {
@@ -39,7 +43,7 @@ public class WalletSearchService {
                 .build());
     }
 
-    public List<WalletStock> findShares(String id) {
+    public List<WalletStock> findStocks(String id) {
         findById(id);
         return walletStockRepository.findByWallet(WalletBuilder.of()
                 .id(id)

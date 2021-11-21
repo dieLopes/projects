@@ -21,7 +21,7 @@ public class WalletStock implements Serializable {
     private String id;
     @Column(name = "COMPANY_CODE", nullable = false)
     private String companyCode;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "WALLET_ID")
     private Wallet wallet;
     @Column(name = "AMOUNT", nullable = false)

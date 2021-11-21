@@ -41,22 +41,26 @@ public class WalletStockPersistenceService {
 
     private CompletableFuture<WalletStock> processBuyOrder (Order order) {
         AtomicReference<WalletStock> walletStock = new AtomicReference<>();
-        walletStockRepository.findByCompanyCode(order.getCompany().getCode()).ifPresentOrElse(stock -> {
-            stock.setAmount(stock.getAmount() + order.getAmount());
-            stock.setBalance(stock.getBalance().add(order.getTotalPrice()));
-            walletStock.set(update(stock));
-        }, () ->
-                walletStock.set(save(WalletStockBuilder.of()
-                        .companyCode(order.getCompany().getCode())
-                        .amount(order.getAmount())
-                        .wallet(order.getWallet())
-                        .balance(order.getTotalPrice())
-                        .build())));
+        walletStockRepository.findByCompanyCodeAndWalletId(order.getCompany().getCode(), order.getWallet().getId())
+                .ifPresentOrElse(stock -> {
+                    stock.setAmount(stock.getAmount() + order.getAmount());
+                    stock.setBalance(stock.getBalance().add(order.getTotalPrice()));
+                    stock.setWallet(order.getWallet());
+                    walletStock.set(update(stock));
+                    }, () ->
+                        walletStock.set(save(WalletStockBuilder.of()
+                                .companyCode(order.getCompany().getCode())
+                                .amount(order.getAmount())
+                                .wallet(order.getWallet())
+                                .balance(order.getTotalPrice())
+                                .build()))
+                );
         return CompletableFuture.completedFuture(walletStock.get());
     }
 
     private CompletableFuture<WalletStock> processSellOrder (Order order) {
-        Optional<WalletStock> walletStock = walletStockRepository.findByCompanyCode(order.getCompany().getCode());
+        Optional<WalletStock> walletStock = walletStockRepository.findByCompanyCodeAndWalletId(
+                order.getCompany().getCode(), order.getWallet().getId());
         if (walletStock.isEmpty()) {
             throw new BadRequestException("Stock not found in your wallet");
         } else {
@@ -66,6 +70,7 @@ public class WalletStockPersistenceService {
             }
             stock.setAmount(stock.getAmount() - order.getAmount());
             stock.setBalance(stock.getBalance().min(order.getTotalPrice()));
+            stock.setWallet(order.getWallet());
             return CompletableFuture.completedFuture(update(stock));
         }
     }

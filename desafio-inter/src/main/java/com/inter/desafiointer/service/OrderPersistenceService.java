@@ -3,7 +3,6 @@ package com.inter.desafiointer.service;
 import com.inter.desafiointer.domain.Company;
 import com.inter.desafiointer.domain.Order;
 import com.inter.desafiointer.domain.Wallet;
-import com.inter.desafiointer.domain.WalletStock;
 import com.inter.desafiointer.exception.BadRequestException;
 import com.inter.desafiointer.repository.CompanyRepository;
 import com.inter.desafiointer.repository.OrderRepository;
@@ -25,15 +24,18 @@ public class OrderPersistenceService {
     private final CompanyRepository companyRepository;
     private final WalletRepository walletRepository;
     private final WalletStockPersistenceService walletStockPersistenceService;
+    private final WalletPersistenceService walletPersistenceService;
 
     public OrderPersistenceService(OrderRepository orderRepository,
                                    CompanyRepository companyRepository,
                                    WalletRepository walletRepository,
-                                   WalletStockPersistenceService walletStockPersistenceService) {
+                                   WalletStockPersistenceService walletStockPersistenceService,
+                                   WalletPersistenceService walletPersistenceService) {
         this.orderRepository = orderRepository;
         this.companyRepository = companyRepository;
         this.walletRepository = walletRepository;
         this.walletStockPersistenceService = walletStockPersistenceService;
+        this.walletPersistenceService = walletPersistenceService;
     }
 
     public Order save (Order order) {
@@ -55,13 +57,15 @@ public class OrderPersistenceService {
     private void processOrder (Order order) {
         CompletableFuture
                 .supplyAsync(() -> walletStockPersistenceService.processOrder(order))
-                .whenComplete((result, ex) -> {
-                    if (null != ex) {
-                        order.setStatus(CANCELLED);
-                    } else {
-                        order.setStatus(OK);
-                    }
-                    orderRepository.save(order);
-                });
+                .whenComplete((result, ex) -> updateOrder(ex, order));
+    }
+
+    private void updateOrder(Throwable ex, Order order) {
+        if (null != ex) {
+            order.setStatus(CANCELLED);
+        } else {
+            order.setStatus(OK);
+        }
+        orderRepository.save(order);
     }
 }
