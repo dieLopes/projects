@@ -7,9 +7,6 @@ public enum CompanyStatus {
     ACTIVE, INACTIVE;
 
     public static CompanyStatus of (String status) {
-        if (status == null) {
-            return null;
-        }
         try {
             return CompanyStatus.valueOf(status);
         } catch (Exception e) {

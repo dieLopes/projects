@@ -1,0 +1,6 @@
+## COMPILAR O PROJETO
+
+Para compilar o projeto, basta executar o comando mvn clean install na raiz do projeto. O comando ja executará todos
+os testes unitários e integrados. Para pular os testes integrados basta adicionar a propriedade -Dskip.integration.tests=true
+no mvn clean install (mvn clean install -Dskip.integration.tests=true).
+

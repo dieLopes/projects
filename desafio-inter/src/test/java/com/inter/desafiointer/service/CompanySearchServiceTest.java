@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -49,6 +50,24 @@ public class CompanySearchServiceTest {
                         tuple("another-id", "Another Name", "SOME4")
                 );
         verify(companyRepository).find(eq(ACTIVE));
+        verifyNoMoreInteractions(companyRepository);
+    }
+
+    @Test
+    public void whenFindCompaniesWithoutStatusThenReturnCompanies () {
+        List<Company> companies = List.of(
+                buildCompany("some-id", "Some Name", "SOME3"),
+                buildCompany("another-id", "Another Name", "SOME4"));
+        when(companyRepository.find(null)).thenReturn(companies);
+        assertThat(companySearchService.find(null)).hasSize(2)
+                .extracting(Company::getId,
+                        Company::getName,
+                        Company::getCode)
+                .containsExactlyInAnyOrder(
+                        tuple("some-id", "Some Name", "SOME3"),
+                        tuple("another-id", "Another Name", "SOME4")
+                );
+        verify(companyRepository).find(eq(null));
         verifyNoMoreInteractions(companyRepository);
     }
 

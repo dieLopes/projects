@@ -41,20 +41,24 @@ public class CompanyPersistenceService {
 
     public Company patch (Map<String, String> patch, String id) {
         Company company = findById(id);
-        try {
-            patch.forEach((key, value) -> {
-                switch (key) {
-                    case "status": company.setStatus(CompanyStatus.valueOf(value)); break;
-                    case "price": company.setPrice(new BigDecimal(value)); break;
-                }
-            });
-        } catch (Exception e) {
-            throw new BadRequestException("Invalid property");
-        }
+        patch.forEach((key, value) -> {
+            switch (key) {
+                case "status":
+                    company.setStatus(CompanyStatus.of(value));
+                    break;
+                case "price":
+                    try {
+                        company.setPrice(new BigDecimal(value));
+                    } catch (Exception e){
+                        throw new BadRequestException("Invalid price");
+                    }
+                    break;
+            }
+        });
         return companyRepository.save(company);
     }
 
-    public Company findById (String id) {
+    protected Company findById (String id) {
         return companyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Company not found"));
     }

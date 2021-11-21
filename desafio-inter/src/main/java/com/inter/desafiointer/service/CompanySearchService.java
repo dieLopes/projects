@@ -19,6 +19,9 @@ public class CompanySearchService {
     }
 
     public List<Company> find(String status) {
+        if (status == null) {
+            return companyRepository.find(null);
+        }
         return companyRepository.find(CompanyStatus.of(status));
     }
 
