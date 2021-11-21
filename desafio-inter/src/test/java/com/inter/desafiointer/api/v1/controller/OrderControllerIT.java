@@ -2,8 +2,10 @@ package com.inter.desafiointer.api.v1.controller;
 
 import com.inter.desafiointer.api.v1.BaseIT;
 import com.inter.desafiointer.api.v1.dto.order.OrderCreateDTO;
+import com.inter.desafiointer.api.v1.dto.order.OrderRandomCreateDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseListDTO;
+import com.inter.desafiointer.api.v1.dto.order.OrderResponseRandomListDTO;
 import com.inter.desafiointer.api.v1.dto.user.UserCreateDTO;
 import com.inter.desafiointer.api.v1.dto.user.UserResponseDTO;
 import org.junit.jupiter.api.Test;
@@ -114,6 +116,22 @@ public class OrderControllerIT extends BaseIT {
         OrderResponseDTO updatedOrder = restTemplate.getForObject(
                 "http://localhost:" + port + ORDER_PATH + orderResponseDTO.getId(), OrderResponseDTO.class);
         assertEquals(OK.toString(), updatedOrder.getStatus());
+    }
+
+    @Test
+    public void whenCreateARandomOrderThenReturnOrders() {
+        String walletId = getWalletId();
+        OrderRandomCreateDTO orderRandomCreateDTO = OrderRandomCreateDTO.Builder.of()
+                .total(new BigDecimal(100))
+                .walletId(walletId)
+                .build();
+        OrderResponseRandomListDTO list = restTemplate.postForEntity(
+                "http://localhost:" + port + ORDER_PATH + "/random",
+                orderRandomCreateDTO, OrderResponseRandomListDTO.class).getBody();
+        assertNotNull(Objects.requireNonNull(list).getOrders());
+        assertEquals(4, list.getOrders().size());
+        assertEquals(new BigDecimal("99.33"), list.getTotal());
+        assertEquals(new BigDecimal("0.67"), list.getChange());
     }
 
     private OrderResponseDTO createOrder (String type, String code, int amount, String walletId) {

@@ -1,8 +1,10 @@
 package com.inter.desafiointer.api.v1.controller;
 
 import com.inter.desafiointer.api.v1.dto.order.OrderCreateDTO;
+import com.inter.desafiointer.api.v1.dto.order.OrderRandomCreateDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseListDTO;
+import com.inter.desafiointer.api.v1.dto.order.OrderResponseRandomListDTO;
 import com.inter.desafiointer.api.v1.mapper.OrderMapper;
 import com.inter.desafiointer.domain.Order;
 import com.inter.desafiointer.service.OrderPersistenceService;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Api(tags = "Order Service")
 @RestController
@@ -72,5 +76,20 @@ public class OrderController {
     public ResponseEntity<OrderResponseDTO> create (@RequestBody OrderCreateDTO orderCreateDTO) {
         Order order = orderPersistenceService.save(OrderMapper.createDtoToEntity(orderCreateDTO));
         return new ResponseEntity<>(OrderMapper.entityToDTO(order), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Create random orders")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Register was created"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Server error"),
+    })
+    @PostMapping(path = "/random", produces="application/json", consumes="application/json")
+    public ResponseEntity<OrderResponseRandomListDTO> create (
+            @RequestBody OrderRandomCreateDTO orderRandomCreateDTO) {
+        List<Order> orders = orderPersistenceService.createRandomOrders(orderRandomCreateDTO.getWalletId(),
+                orderRandomCreateDTO.getTotal());
+        return new ResponseEntity<>(OrderMapper.entitiesListToDTO(orders, orderRandomCreateDTO.getTotal()),
+                HttpStatus.CREATED);
     }
 }

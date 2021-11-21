@@ -14,4 +14,6 @@ public interface CompanyRepository extends JpaRepository<Company, String> {
     List<Company> find(CompanyStatus status);
 
     Optional<Company> findByCode(String code);
+
+    List<Company> findAllByOrderByPriceAsc();
 }

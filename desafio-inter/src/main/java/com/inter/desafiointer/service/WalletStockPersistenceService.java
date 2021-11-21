@@ -2,12 +2,14 @@ package com.inter.desafiointer.service;
 
 import com.inter.desafiointer.builder.WalletStockBuilder;
 import com.inter.desafiointer.domain.Order;
+import com.inter.desafiointer.domain.OrderStatus;
 import com.inter.desafiointer.domain.OrderType;
 import com.inter.desafiointer.domain.WalletStock;
-import com.inter.desafiointer.exception.BadRequestException;
 import com.inter.desafiointer.repository.WalletStockRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -31,15 +33,19 @@ public class WalletStockPersistenceService {
         return walletStockRepository.save(walletStock);
     }
 
-    public CompletableFuture<WalletStock> processOrder(Order order) {
-        if (OrderType.BUY.equals(order.getType())) {
-            return processBuyOrder(order);
-        } else {
-            return processSellOrder(order);
-        }
+    public CompletableFuture<List<Order>> processOrder(List<Order> orders) {
+        List<Order> stocks = new ArrayList<>();
+        orders.forEach(order -> {
+            if (OrderType.BUY.equals(order.getType())) {
+                stocks.add(processBuyOrder(order));
+            } else {
+                stocks.add(processSellOrder(order));
+            }
+        });
+        return CompletableFuture.completedFuture(stocks);
     }
 
-    private CompletableFuture<WalletStock> processBuyOrder (Order order) {
+    private Order processBuyOrder (Order order) {
         AtomicReference<WalletStock> walletStock = new AtomicReference<>();
         walletStockRepository.findByCompanyCodeAndWalletId(order.getCompany().getCode(), order.getWallet().getId())
                 .ifPresentOrElse(stock -> {
@@ -55,23 +61,28 @@ public class WalletStockPersistenceService {
                                 .balance(order.getTotalPrice())
                                 .build()))
                 );
-        return CompletableFuture.completedFuture(walletStock.get());
+        order.setStatus(OrderStatus.OK);
+        return order;
     }
 
-    private CompletableFuture<WalletStock> processSellOrder (Order order) {
+    private Order processSellOrder (Order order) {
         Optional<WalletStock> walletStock = walletStockRepository.findByCompanyCodeAndWalletId(
                 order.getCompany().getCode(), order.getWallet().getId());
         if (walletStock.isEmpty()) {
-            throw new BadRequestException("Stock not found in your wallet");
+            order.setStatus(OrderStatus.CANCELLED);
         } else {
+            //TODO: Quando a quantidade é zero remove?
             WalletStock stock = walletStock.get();
             if (stock.getAmount() < order.getAmount()) {
-                throw new RuntimeException("Insufficient stock on your wallet");
+                order.setStatus(OrderStatus.CANCELLED);
+                return order;
             }
             stock.setAmount(stock.getAmount() - order.getAmount());
-            stock.setBalance(stock.getBalance().min(order.getTotalPrice()));
+            stock.setBalance(stock.getBalance().subtract(order.getTotalPrice()));
             stock.setWallet(order.getWallet());
-            return CompletableFuture.completedFuture(update(stock));
+            update(stock);
+            order.setStatus(OrderStatus.OK);
         }
+        return order;
     }
 }
