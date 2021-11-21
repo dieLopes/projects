@@ -5,6 +5,7 @@ import com.inter.desafiointer.domain.Company;
 import com.inter.desafiointer.exception.BadRequestException;
 import com.inter.desafiointer.exception.NotFoundException;
 import com.inter.desafiointer.repository.CompanyRepository;
+import com.inter.desafiointer.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +32,8 @@ public class CompanyPersistenceServiceTest {
     private CompanyPersistenceService companyPersistenceService;
     @Mock
     private CompanyRepository companyRepository;
+    @Mock
+    private OrderRepository orderRepository;
 
     @Test
     public void whenCreateCompanyThenSaveCompany () {
@@ -143,6 +146,19 @@ public class CompanyPersistenceServiceTest {
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("Company not found");
         verify(companyRepository).findById(eq("some-id"));
+        verifyNoMoreInteractions(companyRepository);
+    }
+
+    @Test
+    public void whenDeleteCompanyButThereAreOrdersThenReturnBadRequest () {
+        Company company = buildCompany("some-id", "Some Name", "SOME4");
+        when(companyRepository.findById(eq("some-id"))).thenReturn(Optional.of(company));
+        when(orderRepository.countByCompany(eq(company))).thenReturn(1L);
+        assertThatThrownBy(() ->  companyPersistenceService.delete("some-id"))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("There are orders to company");
+        verify(companyRepository).findById(eq("some-id"));
+        verify(orderRepository).countByCompany(any(Company.class));
         verifyNoMoreInteractions(companyRepository);
     }
 

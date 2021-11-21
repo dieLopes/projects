@@ -60,7 +60,7 @@ public class CompanyController {
                 CompanyMapper.entitiesToDTOs(companySearchService.find(status))));
     }
 
-    @ApiOperation(value = "Return company by id")
+    @ApiOperation(value = "Return company by code")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Request OK"),
             @ApiResponse(code = 404, message = "Not found"),

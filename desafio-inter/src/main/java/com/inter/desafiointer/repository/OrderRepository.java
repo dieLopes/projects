@@ -1,5 +1,6 @@
 package com.inter.desafiointer.repository;
 
+import com.inter.desafiointer.domain.Company;
 import com.inter.desafiointer.domain.Order;
 import com.inter.desafiointer.domain.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> find(@Param("code") String code);
 
     List<Order> findByWallet(Wallet wallet);
+
+    long countByCompany(Company company);
 }

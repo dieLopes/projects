@@ -3,9 +3,12 @@ package com.inter.desafiointer.service;
 import com.inter.desafiointer.domain.Company;
 import com.inter.desafiointer.domain.CompanyStatus;
 import com.inter.desafiointer.domain.User;
+import com.inter.desafiointer.domain.WalletStock;
 import com.inter.desafiointer.exception.BadRequestException;
 import com.inter.desafiointer.exception.NotFoundException;
 import com.inter.desafiointer.repository.CompanyRepository;
+import com.inter.desafiointer.repository.OrderRepository;
+import com.inter.desafiointer.repository.WalletStockRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,9 +19,12 @@ import java.util.UUID;
 public class CompanyPersistenceService {
 
     private final CompanyRepository companyRepository;
+    private final OrderRepository orderRepository;
 
-    public CompanyPersistenceService(CompanyRepository companyRepository) {
+    public CompanyPersistenceService(CompanyRepository companyRepository,
+                                     OrderRepository orderRepository) {
         this.companyRepository = companyRepository;
+        this.orderRepository = orderRepository;
     }
 
     public Company save(Company company) {
@@ -36,6 +42,7 @@ public class CompanyPersistenceService {
 
     public void delete(String id) {
         Company company = findById(id);
+        validate(company);
         companyRepository.delete(company);
     }
 
@@ -70,6 +77,12 @@ public class CompanyPersistenceService {
             throw new BadRequestException("Code is mandatory");
         } else if (company.getPrice() == null) {
             throw new BadRequestException("Price is mandatory");
+        }
+    }
+
+    private void validate (Company company) {
+        if (orderRepository.countByCompany(company) > 0) {
+            throw new BadRequestException("There are orders to company");
         }
     }
 }
