@@ -11,6 +11,8 @@ public class UserCreateDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     @ApiModelProperty(value = "User name", required = true)
     private String name;
+    @ApiModelProperty(value = "User cpf", required = true)
+    private String cpf;
 
     public String getName() {
         return name;
@@ -18,6 +20,14 @@ public class UserCreateDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public static class Builder {
@@ -34,6 +44,11 @@ public class UserCreateDTO implements Serializable {
 
         public Builder name (String name) {
             user.name = name;
+            return this;
+        }
+
+        public Builder cpf (String cpf) {
+            user.cpf = cpf;
             return this;
         }
 

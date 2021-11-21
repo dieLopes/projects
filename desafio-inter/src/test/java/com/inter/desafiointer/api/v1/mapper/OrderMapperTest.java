@@ -5,6 +5,7 @@ import com.inter.desafiointer.api.v1.dto.order.OrderResponseDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseRandomDTO;
 import com.inter.desafiointer.builder.CompanyBuilder;
 import com.inter.desafiointer.builder.OrderBuilder;
+import com.inter.desafiointer.builder.UserBuilder;
 import com.inter.desafiointer.builder.WalletBuilder;
 import com.inter.desafiointer.domain.Order;
 import com.inter.desafiointer.domain.OrderStatus;
@@ -30,14 +31,13 @@ public class OrderMapperTest {
                 .amount(5)
                 .type(BUY.toString())
                 .code("SOME4")
-                .walletId("some-wallet-id")
+                .cpf("11111111111")
                 .build();
         Order order = OrderMapper.createDtoToEntity(orderCreateDTO);
         assertThat(order.getId()).isNullOrEmpty();
         assertThat(order.getAmount()).isEqualTo(5);
         assertThat(order.getType()).isEqualTo(BUY);
         assertThat(order.getCode()).isEqualTo("SOME4");
-        assertThat(order.getWallet().getId()).isEqualTo("some-wallet-id");
     }
 
     @Test
@@ -47,7 +47,7 @@ public class OrderMapperTest {
         assertThat(orderResponseDTO.getId()).isEqualTo(order.getId());
         assertThat(orderResponseDTO.getAmount()).isEqualTo(order.getAmount());
         assertThat(orderResponseDTO.getCompanyCode()).isEqualTo(order.getCompany().getCode());
-        assertThat(orderResponseDTO.getWalletId()).isEqualTo(order.getWallet().getId());
+        assertThat(orderResponseDTO.getCpf()).isEqualTo("11111111111");
         assertThat(orderResponseDTO.getStatus()).isEqualTo(order.getStatus().toString());
         assertThat(orderResponseDTO.getDate()).isEqualTo(order.getDate());
         assertThat(orderResponseDTO.getType()).isEqualTo(order.getType().toString());
@@ -91,6 +91,9 @@ public class OrderMapperTest {
                         .build())
                 .wallet(WalletBuilder.of()
                         .id("wallet-id")
+                        .user(UserBuilder.of()
+                                .cpf("11111111111")
+                                .build())
                         .build())
                 .status(status)
                 .date(LocalDateTime.now())

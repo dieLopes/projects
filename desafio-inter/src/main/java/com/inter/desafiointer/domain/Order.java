@@ -46,6 +46,7 @@ public class Order implements Serializable {
     private OrderStatus status = PENDING;
 
     private transient String code;
+    private transient String cpf;
 
     public String getId() {
         return id;
@@ -125,5 +126,13 @@ public class Order implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 }

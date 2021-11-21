@@ -71,6 +71,11 @@ public class OrderBuilder {
         return this;
     }
 
+    public OrderBuilder cpf (String cpf) {
+        order.setCpf(cpf);
+        return this;
+    }
+
     public Order build () {
         return order;
     }

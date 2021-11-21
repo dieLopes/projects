@@ -3,7 +3,6 @@ package com.inter.desafiointer.api.v1.controller;
 import com.inter.desafiointer.api.v1.BaseIT;
 import com.inter.desafiointer.api.v1.dto.user.UserCreateDTO;
 import com.inter.desafiointer.api.v1.dto.user.UserResponseDTO;
-import com.inter.desafiointer.api.v1.dto.user.UserResponseListDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,17 +22,23 @@ public class UserControllerIT extends BaseIT {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void whenFindAllUsersThenReturnUserList() {
-        createUser("Some Name");
-        createUser("Another Name");
-        UserResponseListDTO userResponseListDTO = restTemplate
-            .getForObject("http://localhost:" + port + USER_PATH, UserResponseListDTO.class);
-        assertEquals(2, userResponseListDTO.getUsers().size());
+    public void whenFindUserByCpfThenReturnUser() {
+        createUser("11111111111");
+        UserResponseDTO userResponseDTO = restTemplate.getForObject(
+                "http://localhost:" + port + USER_PATH + "11111111111", UserResponseDTO.class);
+        assertEquals("11111111111", userResponseDTO.getCpf());
+    }
+
+    @Test
+    public void whenFindUserByInvalidCpfThenReturnNotFound() {
+        ResponseEntity<UserResponseDTO> responseEntity = restTemplate.getForEntity(
+                "http://localhost:" + port + USER_PATH + "33333333333", UserResponseDTO.class);
+        assertEquals(404, responseEntity.getStatusCodeValue());
     }
 
     @Test
     public void whenCreateUserThenReturnUser() {
-        ResponseEntity<UserResponseDTO> responseEntity = createUser("Some Name");
+        ResponseEntity<UserResponseDTO> responseEntity = createUser("22222222222");
         assertEquals(201, responseEntity.getStatusCodeValue());
         assertNotNull(responseEntity.getBody());
         assertNotNull(responseEntity.getBody().getId());
@@ -49,9 +54,10 @@ public class UserControllerIT extends BaseIT {
         assertEquals(400, responseEntity.getStatusCodeValue());
     }
 
-    private ResponseEntity<UserResponseDTO> createUser(String name) {
+    private ResponseEntity<UserResponseDTO> createUser(String cpf) {
         UserCreateDTO userCreateDTO = UserCreateDTO.Builder.of()
-                .name(name)
+                .name("Some Name")
+                .cpf(cpf)
                 .build();
         return restTemplate.postForEntity("http://localhost:" + port + USER_PATH, userCreateDTO,
                 UserResponseDTO.class);

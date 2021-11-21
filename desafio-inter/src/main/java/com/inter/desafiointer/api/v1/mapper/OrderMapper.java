@@ -3,7 +3,6 @@ package com.inter.desafiointer.api.v1.mapper;
 import com.inter.desafiointer.api.v1.dto.order.OrderCreateDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseDTO;
 import com.inter.desafiointer.api.v1.dto.order.OrderResponseRandomDTO;
-import com.inter.desafiointer.builder.WalletBuilder;
 import com.inter.desafiointer.domain.Order;
 import org.modelmapper.ModelMapper;
 
@@ -17,18 +16,13 @@ public class OrderMapper {
     private static final ModelMapper mapper = new ModelMapper();
 
     public static Order createDtoToEntity(OrderCreateDTO orderCreateDTO) {
-        Order order = mapper.map(orderCreateDTO, Order.class);
-        order.setId(null);
-        order.setWallet(WalletBuilder.of()
-                .id(orderCreateDTO.getWalletId())
-                .build());
-        return order;
+        return mapper.map(orderCreateDTO, Order.class);
     }
 
     public static OrderResponseDTO entityToDTO(Order order) {
         OrderResponseDTO orderResponseDTO = mapper.map(order, OrderResponseDTO.class);
         orderResponseDTO.setCompanyCode(order.getCompany().getCode());
-        orderResponseDTO.setWalletId(order.getWallet().getId());
+        orderResponseDTO.setCpf(order.getWallet().getUser().getCpf());
         return orderResponseDTO;
     }
 

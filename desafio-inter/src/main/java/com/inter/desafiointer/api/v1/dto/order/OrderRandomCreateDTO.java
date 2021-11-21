@@ -1,6 +1,5 @@
 package com.inter.desafiointer.api.v1.dto.order;
 
-import com.inter.desafiointer.api.v1.dto.user.UserCreateDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -12,16 +11,16 @@ public class OrderRandomCreateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @ApiModelProperty("List of orders")
-    private String walletId;
+    private String cpf;
     @ApiModelProperty("Total for orders")
     private BigDecimal total;
 
-    public String getWalletId() {
-        return walletId;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setWalletId(String walletId) {
-        this.walletId = walletId;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public BigDecimal getTotal() {
@@ -44,8 +43,8 @@ public class OrderRandomCreateDTO implements Serializable {
             return new Builder();
         }
 
-        public Builder walletId (String walletId) {
-            order.walletId = walletId;
+        public Builder cpf (String cpf) {
+            order.cpf = cpf;
             return this;
         }
 

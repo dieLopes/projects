@@ -30,17 +30,17 @@ public class WalletController {
         this.walletSearchService = walletSearchService;
     }
 
-    @ApiOperation(value = "Return all wallet orders")
+    @ApiOperation(value = "Return wallet by user cpf")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Request responses OK"),
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server error"),
     })
-    @GetMapping(path = "/{id}", produces="application/json")
+    @GetMapping(path = "/{cpf}", produces="application/json")
     public ResponseEntity<WalletResponseDTO> find (
-            @ApiParam(value = "Wallet id", required = true)
-            @NonNull @PathVariable(value = "id") String id) {
-        return ResponseEntity.ok(WalletMapper.entityToDTO(walletSearchService.findById(id)));
+            @ApiParam(value = "User cpf", required = true)
+            @NonNull @PathVariable(value = "cpf") String cpf) {
+        return ResponseEntity.ok(WalletMapper.entityToDTO(walletSearchService.findByUserCpf(cpf)));
     }
 
     @ApiOperation(value = "Return all wallet orders")
@@ -49,12 +49,12 @@ public class WalletController {
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server error"),
     })
-    @GetMapping(path = "/{id}/orders", produces="application/json")
+    @GetMapping(path = "/{cpf}/orders", produces="application/json")
     public ResponseEntity<OrderResponseListDTO> findOrders (
-            @ApiParam(value = "Wallet id", required = true)
-            @NonNull @PathVariable(value = "id") String id) {
+            @ApiParam(value = "User cpf", required = true)
+            @NonNull @PathVariable(value = "cpf") String cpf) {
         return ResponseEntity.ok(new OrderResponseListDTO(
-                OrderMapper.entitiesToDTOs(walletSearchService.findOrders(id))));
+                OrderMapper.entitiesToDTOs(walletSearchService.findOrders(cpf))));
     }
 
     @ApiOperation(value = "Return all wallet stocks")
@@ -63,11 +63,11 @@ public class WalletController {
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Server error"),
     })
-    @GetMapping(path = "/{id}/stocks", produces="application/json")
+    @GetMapping(path = "/{cpf}/stocks", produces="application/json")
     public ResponseEntity<WalletStockResponseListDTO> findStocks (
-            @ApiParam(value = "Wallet id", required = true)
-            @NonNull @PathVariable(value = "id") String id) {
+            @ApiParam(value = "User cpf", required = true)
+            @NonNull @PathVariable(value = "cpf") String cpf) {
         return ResponseEntity.ok(new WalletStockResponseListDTO(
-                WalletStockMapper.entitiesToDTOs(walletSearchService.findStocks(id))));
+                WalletStockMapper.entitiesToDTOs(walletSearchService.findStocks(cpf))));
     }
 }

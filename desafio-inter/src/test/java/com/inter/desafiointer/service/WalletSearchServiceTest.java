@@ -6,10 +6,12 @@ import com.inter.desafiointer.builder.UserBuilder;
 import com.inter.desafiointer.builder.WalletBuilder;
 import com.inter.desafiointer.builder.WalletStockBuilder;
 import com.inter.desafiointer.domain.Order;
+import com.inter.desafiointer.domain.User;
 import com.inter.desafiointer.domain.Wallet;
 import com.inter.desafiointer.domain.WalletStock;
 import com.inter.desafiointer.exception.NotFoundException;
 import com.inter.desafiointer.repository.OrderRepository;
+import com.inter.desafiointer.repository.UserRepository;
 import com.inter.desafiointer.repository.WalletRepository;
 import com.inter.desafiointer.repository.WalletStockRepository;
 import org.junit.jupiter.api.Test;
@@ -46,96 +48,94 @@ public class WalletSearchServiceTest {
     private WalletStockRepository walletStockRepository;
     @Mock
     private OrderRepository orderRepository;
+    @Mock
+    private UserRepository userRepository;
 
     @Test
-    public void whenFindWalletByIdThenReturnWalletWithBalance () throws NotFoundException {
-        Wallet wallet = buildWallet("some-id");
-        when(walletRepository.findById(eq("some-id"))).thenReturn(Optional.of(wallet));
-        when(walletStockRepository.findWalletBalance(wallet)).thenReturn(BigDecimal.TEN);
-        assertThat(walletSearchService.findById("some-id")).satisfies(find -> {
-            assertThat(find.getId()).isEqualTo(wallet.getId());
+    public void whenFindWalletByIdThenReturnWalletWithBalance () {
+        when(userRepository.findByCpf(eq("111"))).thenReturn(Optional.of(buildUser()));
+        when(walletStockRepository.findWalletBalance(any(Wallet.class))).thenReturn(BigDecimal.TEN);
+        assertThat(walletSearchService.findByUserCpf("111")).satisfies(find -> {
+            assertThat(find.getId()).isEqualTo("wallet-id");
             assertThat(find.getBalance()).isEqualTo(BigDecimal.TEN);
         });
-        verify(walletRepository).findById(eq("some-id"));
-        verify(walletStockRepository).findWalletBalance(eq(wallet));
+        verify(userRepository).findByCpf(eq("111"));
+        verify(walletStockRepository).findWalletBalance(any(Wallet.class));
         verifyNoMoreInteractions(walletRepository);
     }
 
     @Test
-    public void whenFindWalletByInvalidIdThenReturnNotFound () {
-        when(walletRepository.findById(anyString())).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> walletSearchService.findById("INVALID3"))
+    public void whenFindUserWalletInvalidCpfThenReturnNotFound () {
+        when(userRepository.findByCpf(anyString())).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> walletSearchService.findByUserCpf("111"))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("Wallet not found");
-        verify(walletRepository).findById(eq("INVALID3"));
+        verify(userRepository).findByCpf(eq("111"));
         verifyNoMoreInteractions(walletRepository);
         verifyZeroInteractions(walletStockRepository);
     }
 
     @Test
     public void whenFindWalletOrdersThenReturnOrdersInWallet () {
-        Wallet wallet = buildWallet("wallet-id");
         List<Order> orders = List.of(
                 buildOrder("some-id"),
                 buildOrder("another-id"));
-        when(walletRepository.findById(eq("wallet-id"))).thenReturn(Optional.of(wallet));
+        when(userRepository.findByCpf(eq("111"))).thenReturn(Optional.of(buildUser()));
         when(orderRepository.findByWallet(any(Wallet.class))).thenReturn(orders);
-        when(walletStockRepository.findWalletBalance(wallet)).thenReturn(BigDecimal.TEN);
-        assertThat(walletSearchService.findOrders("wallet-id")).hasSize(2)
+        assertThat(walletSearchService.findOrders("111")).hasSize(2)
                 .extracting(Order::getId)
                 .containsExactlyInAnyOrder("some-id", "another-id");
-        verify(walletRepository).findById(eq("wallet-id"));
+        verify(userRepository).findByCpf(eq("111"));
         verify(orderRepository).findByWallet(any(Wallet.class));
-        verify(walletStockRepository).findWalletBalance(eq(wallet));
-        verifyNoMoreInteractions(walletRepository, orderRepository);
+        verifyNoMoreInteractions(userRepository, orderRepository);
+        verifyZeroInteractions(walletRepository);
     }
 
     @Test
-    public void whenFindWalletOrdersWithInvalidIdThenReturnNotFound () {
-        when(walletRepository.findById(anyString())).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> walletSearchService.findOrders("INVALID3"))
+    public void whenFindWalletOrdersWithInvalidCpfThenReturnNotFound () {
+        when(userRepository.findByCpf(eq("111"))).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> walletSearchService.findOrders("111"))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("Wallet not found");
-        verify(walletRepository).findById(eq("INVALID3"));
-        verifyNoMoreInteractions(walletRepository);
-        verifyZeroInteractions(orderRepository, walletStockRepository);
+                .hasMessage("User not found");
+        verify(userRepository).findByCpf(eq("111"));
+        verifyNoMoreInteractions(userRepository);
+        verifyZeroInteractions(walletRepository, orderRepository, walletStockRepository);
     }
 
     @Test
     public void whenFindWalletStocksThenReturnStocksInWallet () {
-        Wallet wallet = buildWallet("wallet-id");
+        User user = buildUser();
         List<WalletStock> stocks = List.of(
                 buildStock("some-id"),
                 buildStock("another-id"));
-        when(walletRepository.findById(eq("wallet-id"))).thenReturn(Optional.of(wallet));
+        when(userRepository.findByCpf(eq("111"))).thenReturn(Optional.of(user));
         when(walletStockRepository.findByWallet(any(Wallet.class))).thenReturn(stocks);
-        when(walletStockRepository.findWalletBalance(wallet)).thenReturn(BigDecimal.TEN);
-        assertThat(walletSearchService.findStocks("wallet-id")).hasSize(2)
+        assertThat(walletSearchService.findStocks("111")).hasSize(2)
                 .extracting(WalletStock::getId)
                 .containsExactlyInAnyOrder("some-id", "another-id");
-        verify(walletRepository).findById(eq("wallet-id"));
+        verify(userRepository).findByCpf(eq("111"));
         verify(walletStockRepository).findByWallet(any(Wallet.class));
-        verify(walletStockRepository).findWalletBalance(eq(wallet));
-        verifyNoMoreInteractions(walletRepository, walletStockRepository);
-        verifyZeroInteractions(orderRepository);
+        verifyNoMoreInteractions(userRepository, walletStockRepository);
+        verifyZeroInteractions(walletRepository, orderRepository);
     }
 
     @Test
-    public void whenFindWalletStocksWithInvalidIdThenReturnNotFound () {
-        when(walletRepository.findById(anyString())).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> walletSearchService.findStocks("INVALID3"))
+    public void whenFindWalletStocksWithInvalidCpfThenReturnNotFound () {
+        when(userRepository.findByCpf(eq("111"))).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> walletSearchService.findStocks("111"))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("Wallet not found");
-        verify(walletRepository).findById(eq("INVALID3"));
-        verifyNoMoreInteractions(walletRepository);
-        verifyZeroInteractions(orderRepository, walletStockRepository);
+                .hasMessage("User not found");
+        verify(userRepository).findByCpf(eq("111"));
+        verifyNoMoreInteractions(userRepository);
+        verifyZeroInteractions(walletRepository, orderRepository, walletStockRepository);
     }
 
-    private Wallet buildWallet (String id) {
-        return WalletBuilder.of()
-                .id(id)
-                .user(UserBuilder.of()
-                        .id("user-id")
+    private User buildUser() {
+        return UserBuilder.of()
+                .id("some-id")
+                .cpf("111")
+                .wallet(WalletBuilder.of()
+                        .id("wallet-id")
                         .build())
                 .build();
     }

@@ -43,10 +43,10 @@ public class OrderControllerIT extends BaseIT {
 
     @Test
     public void whenFindAllOrdersThenReturnOrderList() {
-        String walletId = getWalletId();
-        createOrder("BUY", "BIDI11", 10, walletId);
-        createOrder("SELL", "BIDI11", 5, walletId);
-        createOrder("BUY", "LREN3", 5, walletId);
+        String cpf = getUserCpf();
+        createOrder("BUY", "BIDI11", 10, cpf);
+        createOrder("SELL", "BIDI11", 5, cpf);
+        createOrder("BUY", "LREN3", 5, cpf);
 
         OrderResponseListDTO orderResponseListDTO = restTemplate
                 .getForObject("http://localhost:" + port + ORDER_PATH, OrderResponseListDTO.class);
@@ -63,8 +63,8 @@ public class OrderControllerIT extends BaseIT {
 
     @Test
     public void whenFindOrderByIdThenReturnOrder() {
-        String walletId = getWalletId();
-        OrderResponseDTO orderCreated = createOrder("BUY", "EGIE3", 10, walletId);
+        String cpf = getUserCpf();
+        OrderResponseDTO orderCreated = createOrder("BUY", "EGIE3", 10, cpf);
 
         OrderResponseDTO orderResponseDTO = restTemplate.getForObject(
                 "http://localhost:" + port + ORDER_PATH + orderCreated.getId(), OrderResponseDTO.class);
@@ -76,15 +76,15 @@ public class OrderControllerIT extends BaseIT {
         assertEquals(orderCreated.getUnitPrice(), orderResponseDTO.getUnitPrice());
         assertEquals(orderCreated.getTotalPrice(), orderResponseDTO.getTotalPrice());
         assertEquals(orderCreated.getCompanyCode(), orderResponseDTO.getCompanyCode());
-        assertEquals(orderCreated.getWalletId(), orderResponseDTO.getWalletId());
+        assertEquals(orderCreated.getCpf(), orderResponseDTO.getCpf());
     }
 
     @Test
     public void whenFindOrdersFilteringByCodeThenReturnOrderList() {
-        String walletId = getWalletId();
-        createOrder("BUY", "BIDI11", 10, walletId);
-        createOrder("SELL", "BIDI11", 5, walletId);
-        createOrder("BUY", "LREN3", 5, walletId);
+        String cpf = getUserCpf();
+        createOrder("BUY", "BIDI11", 10, cpf);
+        createOrder("SELL", "BIDI11", 5, cpf);
+        createOrder("BUY", "LREN3", 5, cpf);
         OrderResponseListDTO orderResponseListDTO = restTemplate
                 .getForObject("http://localhost:" + port + ORDER_PATH + "?code=BIDI11", OrderResponseListDTO.class);
         assertEquals(2, orderResponseListDTO.getOrders().size());
@@ -92,8 +92,8 @@ public class OrderControllerIT extends BaseIT {
 
     @Test
     public void whenCreateOrderThenReturnOrder() {
-        String walletId = getWalletId();
-        OrderResponseDTO orderResponseDTO = createOrder("BUY", "BIDI11", 10, walletId);
+        String cpf = getUserCpf();
+        OrderResponseDTO orderResponseDTO = createOrder("BUY", "BIDI11", 10, cpf);
         assertNotNull(orderResponseDTO.getId());
         assertNotNull(orderResponseDTO.getDate());
         assertEquals("BUY", orderResponseDTO.getType());
@@ -101,16 +101,16 @@ public class OrderControllerIT extends BaseIT {
         assertEquals(new BigDecimal("66.51"), orderResponseDTO.getUnitPrice());
         assertEquals(new BigDecimal("665.10"), orderResponseDTO.getTotalPrice());
         assertEquals("BIDI11", orderResponseDTO.getCompanyCode());
-        assertEquals(walletId, orderResponseDTO.getWalletId());
+        assertEquals("11111111111", orderResponseDTO.getCpf());
         assertEquals(PENDING.toString(), orderResponseDTO.getStatus());
     }
 
     @Test
     public void whenCreateOrderForInactiveCompanyThenReturnBadRequest() {
-        String walletId = getWalletId();
+        getUserCpf();
         patchCompany("inter-id", INACTIVE);
         OrderCreateDTO orderCreateDTO = OrderCreateDTO.Builder.of()
-                .walletId(walletId)
+                .cpf("11111111111")
                 .code("BIDI11")
                 .type("BUY")
                 .amount(5)
@@ -123,8 +123,8 @@ public class OrderControllerIT extends BaseIT {
 
     @Test
     public void whenCreateWrongOrderAndGetThenReturnOrderWithCancelledStatus() throws InterruptedException {
-        String walletId = getWalletId();
-        OrderResponseDTO orderResponseDTO = createOrder("SELL", "MGLU3", 10, walletId);
+        String cpf = getUserCpf();
+        OrderResponseDTO orderResponseDTO = createOrder("SELL", "MGLU3", 10, cpf);
         assertEquals("PENDING", orderResponseDTO.getStatus());
         Thread.sleep(200);
         OrderResponseDTO updatedOrder = restTemplate.getForObject(
@@ -134,8 +134,8 @@ public class OrderControllerIT extends BaseIT {
 
     @Test
     public void whenCreateRightOrderAndGetThenReturnOrderWithOKStatus() throws InterruptedException {
-        String walletId = getWalletId();
-        OrderResponseDTO orderResponseDTO = createOrder("BUY", "MGLU3", 10, walletId);
+        String cpf = getUserCpf();
+        OrderResponseDTO orderResponseDTO = createOrder("BUY", "MGLU3", 10, cpf);
         assertEquals("PENDING", orderResponseDTO.getStatus());
         Thread.sleep(200);
         OrderResponseDTO updatedOrder = restTemplate.getForObject(
@@ -145,10 +145,10 @@ public class OrderControllerIT extends BaseIT {
 
     @Test
     public void whenCreateARandomOrderThenReturnOrders() {
-        String walletId = getWalletId();
+        String cpf = getUserCpf();
         OrderRandomCreateDTO orderRandomCreateDTO = OrderRandomCreateDTO.Builder.of()
                 .total(new BigDecimal(100))
-                .walletId(walletId)
+                .cpf(cpf)
                 .build();
         OrderResponseRandomDTO list = restTemplate.postForEntity(
                 "http://localhost:" + port + ORDER_PATH + "/random",
@@ -162,10 +162,10 @@ public class OrderControllerIT extends BaseIT {
     @Test
     public void whenCreateARandomOrderIgnoreInactiveCompaniesAndThenReturnOrders() {
         patchCompany("marisa-id", INACTIVE);
-        String walletId = getWalletId();
+        String cpf = getUserCpf();
         OrderRandomCreateDTO orderRandomCreateDTO = OrderRandomCreateDTO.Builder.of()
                 .total(new BigDecimal(100))
-                .walletId(walletId)
+                .cpf(cpf)
                 .build();
         OrderResponseRandomDTO list = restTemplate.postForEntity(
                 "http://localhost:" + port + ORDER_PATH + "/random",
@@ -176,9 +176,9 @@ public class OrderControllerIT extends BaseIT {
         assertEquals(new BigDecimal("13.27"), list.getChange());
     }
 
-    private OrderResponseDTO createOrder (String type, String code, int amount, String walletId) {
+    private OrderResponseDTO createOrder (String type, String code, int amount, String cpf) {
         OrderCreateDTO orderCreateDTO = OrderCreateDTO.Builder.of()
-                .walletId(walletId)
+                .cpf(cpf)
                 .code(code)
                 .type(type)
                 .amount(amount)
@@ -187,13 +187,14 @@ public class OrderControllerIT extends BaseIT {
                 OrderResponseDTO.class).getBody();
     }
 
-    private String getWalletId () {
+    private String getUserCpf() {
         UserCreateDTO userCreateDTO = UserCreateDTO.Builder.of()
                 .name("New User")
+                .cpf("11111111111")
                 .build();
         ResponseEntity<UserResponseDTO> user = restTemplate.postForEntity(
                 "http://localhost:" + port + "/broker/api/v1/users", userCreateDTO, UserResponseDTO.class);
-        return Objects.requireNonNull(user.getBody()).getWallet().getId();
+        return Objects.requireNonNull(user.getBody()).getCpf();
     }
 
     private void patchCompany (String id, CompanyStatus status) {

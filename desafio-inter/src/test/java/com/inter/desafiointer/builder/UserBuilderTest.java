@@ -12,12 +12,14 @@ public class UserBuilderTest {
         User user = UserBuilder.of()
                 .id("some-id")
                 .name("Some Name")
+                .cpf("11111111111")
                 .wallet(WalletBuilder.of()
                         .id("wallet-id")
                         .build())
                 .build();
         assertThat(user.getId()).isEqualTo("some-id");
         assertThat(user.getName()).isEqualTo("Some Name");
+        assertThat(user.getCpf()).isEqualTo("11111111111");
         assertThat(user.getWallet().getId()).isEqualTo("wallet-id");
     }
 }

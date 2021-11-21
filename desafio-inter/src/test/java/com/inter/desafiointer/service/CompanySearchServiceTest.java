@@ -21,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -80,7 +79,7 @@ public class CompanySearchServiceTest {
     }
 
     @Test
-    public void whenFindCompanyByCodeThenReturnCompany () throws NotFoundException {
+    public void whenFindCompanyByCodeThenReturnCompany () {
         Company company = buildCompany("some-id", "Some Name", "SOME4");
         when(companyRepository.findByCode(eq("SOME4"))).thenReturn(Optional.of(company));
         assertThat(companySearchService.findByCode("SOME4")).satisfies(findComp -> {

@@ -14,6 +14,8 @@ public class UserResponseDTO implements Serializable {
     private String id;
     @ApiModelProperty("User name")
     private String name;
+    @ApiModelProperty("User cpf")
+    private String cpf;
     @ApiModelProperty("User wallet")
     private WalletResponseDTO wallet;
 
@@ -31,6 +33,14 @@ public class UserResponseDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public WalletResponseDTO getWallet() {

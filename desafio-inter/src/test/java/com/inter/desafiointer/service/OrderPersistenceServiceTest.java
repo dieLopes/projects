@@ -64,14 +64,14 @@ public class OrderPersistenceServiceTest {
         Order order = buildOrder(5);
         when(companyRepository.findByCodeAndStatus(eq("SOME4"), eq(ACTIVE)))
                 .thenReturn(Optional.of(buildCompany()));
-        when(walletRepository.findById(eq("wallet-id"))).thenReturn(Optional.of(buildWallet()));
+        when(walletRepository.findByUserCpf(eq("111"))).thenReturn(Optional.of(buildWallet()));
         when(orderRepository.save(eq(order))).thenReturn(order);
         when(walletStockPersistenceService.processOrder(anyList()))
                 .thenReturn(CompletableFuture.completedFuture(List.of(order)));
         orderPersistenceService.save(order);
         Thread.sleep(500);
         verify(companyRepository).findByCodeAndStatus(eq("SOME4"), eq(ACTIVE));
-        verify(walletRepository).findById(eq("wallet-id"));
+        verify(walletRepository).findByUserCpf(eq("111"));
         verify(orderRepository, times(2)).save(any(Order.class));
         verify(walletStockPersistenceService).processOrder(anyList());
         verifyNoMoreInteractions(companyRepository, walletRepository, orderRepository, walletStockPersistenceService);
@@ -114,19 +114,19 @@ public class OrderPersistenceServiceTest {
         Order order = buildOrder(5);
         when(companyRepository.findByCodeAndStatus(eq("SOME4"), eq(ACTIVE)))
                 .thenReturn(Optional.of(buildCompany()));
-        when(walletRepository.findById(eq("wallet-id"))).thenReturn(Optional.empty());
+        when(walletRepository.findByUserCpf(eq("111"))).thenReturn(Optional.empty());
         assertThatThrownBy(() -> orderPersistenceService.save(order))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("Wallet not found with id " + order.getWallet().getId());
+                .hasMessage("Wallet not found for user 111");
         verify(companyRepository).findByCodeAndStatus(eq("SOME4"), eq(ACTIVE));
-        verify(walletRepository).findById(eq("wallet-id"));
+        verify(walletRepository).findByUserCpf(eq("111"));
         verifyNoMoreInteractions(companyRepository, walletRepository);
         verifyZeroInteractions(walletStockPersistenceService, orderRepository);
     }
 
     @Test
     public void whenCreateRandomOrdersThenSaveAListOfOrders () throws InterruptedException {
-        when(walletRepository.findById(eq("some-id"))).thenReturn(Optional.of(buildWallet()));
+        when(walletRepository.findByUserCpf(eq("11111111111"))).thenReturn(Optional.of(buildWallet()));
         when(companyRepository.findByStatusOrderByPriceAsc(eq(ACTIVE))).thenReturn(companies);
         List<Order> orders = new ArrayList<>();
         while (orders.size() < 4) {
@@ -134,9 +134,9 @@ public class OrderPersistenceServiceTest {
         }
         when(walletStockPersistenceService.processOrder(anyList()))
                 .thenReturn(CompletableFuture.completedFuture(orders));
-        orderPersistenceService.createRandomOrders("some-id", new BigDecimal("100.00"));
+        orderPersistenceService.createRandomOrders("11111111111", new BigDecimal("100.00"));
         Thread.sleep(500);
-        verify(walletRepository).findById(eq("some-id"));
+        verify(walletRepository).findByUserCpf(eq("11111111111"));
         verify(companyRepository).findByStatusOrderByPriceAsc(eq(ACTIVE));
         verify(orderRepository, times(8)).save(any(Order.class));
         verify(walletStockPersistenceService).processOrder(anyList());
@@ -145,12 +145,12 @@ public class OrderPersistenceServiceTest {
 
     @Test
     public void whenCreateRandomOrderButInactiveCompaniesThenReturnBadRequest () {
-        when(walletRepository.findById(eq("some-id"))).thenReturn(Optional.of(buildWallet()));
+        when(walletRepository.findByUserCpf(eq("11111111111"))).thenReturn(Optional.of(buildWallet()));
         when(companyRepository.findByStatusOrderByPriceAsc(eq(ACTIVE))).thenReturn(List.of());
-        assertThatThrownBy(() -> orderPersistenceService.createRandomOrders("some-id", BigDecimal.TEN))
+        assertThatThrownBy(() -> orderPersistenceService.createRandomOrders("11111111111", BigDecimal.TEN))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("There aren't companies to buy");
-        verify(walletRepository).findById(eq("some-id"));
+        verify(walletRepository).findByUserCpf(eq("11111111111"));
         verify(companyRepository).findByStatusOrderByPriceAsc(eq(ACTIVE));
         verifyNoMoreInteractions(walletRepository, companyRepository);
         verifyZeroInteractions(walletStockPersistenceService, orderRepository);
@@ -158,11 +158,11 @@ public class OrderPersistenceServiceTest {
 
     @Test
     public void whenCreateRandomOrderInvalidWalletThenReturnBadRequest () {
-        when(walletRepository.findById(eq("some-id"))).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> orderPersistenceService.createRandomOrders("some-id", BigDecimal.TEN))
+        when(walletRepository.findByUserCpf(eq("11111111111"))).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> orderPersistenceService.createRandomOrders("11111111111", BigDecimal.TEN))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("Wallet not found with id some-id");
-        verify(walletRepository).findById(eq("some-id"));
+                .hasMessage("Wallet not found for user 11111111111");
+        verify(walletRepository).findByUserCpf(eq("11111111111"));
         verifyNoMoreInteractions(walletRepository);
         verifyZeroInteractions(companyRepository, walletStockPersistenceService, orderRepository);
     }
@@ -174,6 +174,7 @@ public class OrderPersistenceServiceTest {
                         .id("wallet-id")
                         .build())
                 .code("SOME4")
+                .cpf("111")
                 .type(BUY)
                 .build();
     }

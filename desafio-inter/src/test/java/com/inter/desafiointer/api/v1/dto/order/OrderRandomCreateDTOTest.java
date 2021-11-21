@@ -12,9 +12,9 @@ public class OrderRandomCreateDTOTest {
     public void whenBuildDTOThenReturnDTO () {
         OrderRandomCreateDTO orderCreateDTO = OrderRandomCreateDTO.Builder.of()
                 .total(new BigDecimal(100))
-                .walletId("some-wallet-id")
+                .cpf("11111111111")
                 .build();
         assertThat(orderCreateDTO.getTotal()).isEqualTo(new BigDecimal(100));
-        assertThat(orderCreateDTO.getWalletId()).isEqualTo("some-wallet-id");
+        assertThat(orderCreateDTO.getCpf()).isEqualTo("11111111111");
     }
 }

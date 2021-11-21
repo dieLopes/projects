@@ -36,10 +36,10 @@ public class WalletControllerIT extends BaseIT {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void whenFindWalletByIdThenReturnWallet() {
-        String walletId = getWalletId();
-        WalletResponseDTO walletResponseDTO = restTemplate
-                .getForObject("http://localhost:" + port + WALLET_PATH + walletId, WalletResponseDTO.class);
+    public void whenFindWalletByUserCpfThenReturnWallet() {
+        UserResponseDTO user = getUser();
+        WalletResponseDTO walletResponseDTO = restTemplate.getForObject(
+                "http://localhost:" + port + WALLET_PATH + user.getCpf(), WalletResponseDTO.class);
         assertNotNull(walletResponseDTO.getId());
         assertEquals(new BigDecimal("0.00"), walletResponseDTO.getBalance());
     }
@@ -47,19 +47,19 @@ public class WalletControllerIT extends BaseIT {
     @Test
     public void whenFindWalletByInvalidIdThenReturnNotFound() {
         ResponseEntity<WalletResponseDTO> responseEntity = restTemplate.getForEntity(
-                "http://localhost:" + port + WALLET_PATH + "INVALID-ID", WalletResponseDTO.class);
+                "http://localhost:" + port + WALLET_PATH + 222L, WalletResponseDTO.class);
         assertEquals(404, responseEntity.getStatusCodeValue());
     }
 
     @Test
     public void whenFindAllWalletOrdersThenReturnOrderList() {
-        String walletId = getWalletId();
-        createOrder("BUY", "BIDI11", 10, walletId);
-        createOrder("SELL", "BIDI11", 5, walletId);
-        createOrder("BUY", "LREN3", 5, walletId);
+        String cpf = getUser().getCpf();
+        createOrder("BUY", "BIDI11", 10, cpf);
+        createOrder("SELL", "BIDI11", 5, cpf);
+        createOrder("BUY", "LREN3", 5, cpf);
 
         OrderResponseListDTO orderResponseListDTO = restTemplate.getForObject(
-                "http://localhost:" + port + WALLET_PATH + walletId + "/orders", OrderResponseListDTO.class);
+                "http://localhost:" + port + WALLET_PATH + cpf + "/orders", OrderResponseListDTO.class);
         assertEquals(3, orderResponseListDTO.getOrders().size());
         assertEquals(2, orderResponseListDTO.getOrders()
                 .stream()
@@ -73,15 +73,14 @@ public class WalletControllerIT extends BaseIT {
 
     @Test
     public void whenFindAllWalletStocksThenReturnStockList() throws InterruptedException {
-
-        String walletId = getWalletId();
-        createOrder("BUY", "BIDI11", 10, walletId);
+        String cpf = getUser().getCpf();
+        createOrder("BUY", "BIDI11", 10, cpf);
         Thread.sleep(1000);
-        createOrder("SELL", "BIDI11", 5, walletId);
-        createOrder("BUY", "LREN3", 5, walletId);
+        createOrder("SELL", "BIDI11", 5, cpf);
+        createOrder("BUY", "LREN3", 5, cpf);
 
         WalletStockResponseListDTO walletStockResponseListDTO = restTemplate.getForObject(
-                "http://localhost:" + port + WALLET_PATH + walletId + "/stocks", WalletStockResponseListDTO.class);
+                "http://localhost:" + port + WALLET_PATH + cpf + "/stocks", WalletStockResponseListDTO.class);
         assertEquals(2, walletStockResponseListDTO.getStocks().size());
 
         Optional<WalletStockResponseDTO> optBidi = walletStockResponseListDTO.getStocks()
@@ -109,18 +108,17 @@ public class WalletControllerIT extends BaseIT {
 
     @Test
     public void whenFindAllWalletStocksRandomBuyThenReturnStockList() throws InterruptedException {
-
-        String walletId = getWalletId();
+        String cpf = getUser().getCpf();
         OrderRandomCreateDTO orderRandomCreateDTO = OrderRandomCreateDTO.Builder.of()
                 .total(new BigDecimal(100))
-                .walletId(walletId)
+                .cpf(cpf)
                 .build();
         restTemplate.postForEntity("http://localhost:" + port + "/broker/api/v1/orders/random",
                 orderRandomCreateDTO, OrderResponseRandomDTO.class).getBody();
         Thread.sleep(2000);
 
         WalletStockResponseListDTO walletStockResponseListDTO = restTemplate.getForObject(
-                "http://localhost:" + port + WALLET_PATH + walletId + "/stocks", WalletStockResponseListDTO.class);
+                "http://localhost:" + port + WALLET_PATH + cpf + "/stocks", WalletStockResponseListDTO.class);
         assertEquals(4, walletStockResponseListDTO.getStocks().size());
 
         validateStock("AMAR3", 2).accept(walletStockResponseListDTO);
@@ -143,28 +141,28 @@ public class WalletControllerIT extends BaseIT {
 
     @Test
     public void whenBuyAndSellStocksThenReturnWalletBalanceUpdated() throws InterruptedException {
-        String walletId = getWalletId();
+        String cpf = getUser().getCpf();
         WalletResponseDTO walletResponseDTO = restTemplate
-                .getForObject("http://localhost:" + port + WALLET_PATH + walletId, WalletResponseDTO.class);
+                .getForObject("http://localhost:" + port + WALLET_PATH + cpf, WalletResponseDTO.class);
         assertNotNull(walletResponseDTO.getId());
         assertEquals(new BigDecimal("0.00"), walletResponseDTO.getBalance());
 
-        createOrder("BUY", "BIDI11", 10, walletId);
+        createOrder("BUY", "BIDI11", 10, cpf);
         Thread.sleep(1000);
         walletResponseDTO = restTemplate.getForObject(
-                "http://localhost:" + port + WALLET_PATH + walletId, WalletResponseDTO.class);
+                "http://localhost:" + port + WALLET_PATH + cpf, WalletResponseDTO.class);
         assertEquals(new BigDecimal("665.10"), walletResponseDTO.getBalance());
 
-        createOrder("SELL", "BIDI11", 4, walletId);
+        createOrder("SELL", "BIDI11", 4, cpf);
         Thread.sleep(1000);
         walletResponseDTO = restTemplate.getForObject(
-                "http://localhost:" + port + WALLET_PATH + walletId, WalletResponseDTO.class);
+                "http://localhost:" + port + WALLET_PATH + cpf, WalletResponseDTO.class);
         assertEquals(new BigDecimal("399.06"), walletResponseDTO.getBalance());
     }
 
-    private void createOrder (String type, String code, int amount, String walletId) {
+    private void createOrder (String type, String code, int amount, String cpf) {
         OrderCreateDTO orderCreateDTO = OrderCreateDTO.Builder.of()
-                .walletId(walletId)
+                .cpf(cpf)
                 .code(code)
                 .type(type)
                 .amount(amount)
@@ -173,12 +171,13 @@ public class WalletControllerIT extends BaseIT {
                 OrderResponseDTO.class);
     }
 
-    public String getWalletId () {
+    public UserResponseDTO getUser() {
         UserCreateDTO userCreateDTO = UserCreateDTO.Builder.of()
                 .name("New User")
+                .cpf(String.valueOf(System.currentTimeMillis()))
                 .build();
         ResponseEntity<UserResponseDTO> user = restTemplate.postForEntity(
                 "http://localhost:" + port + "/broker/api/v1/users", userCreateDTO, UserResponseDTO.class);
-        return Objects.requireNonNull(user.getBody()).getWallet().getId();
+        return Objects.requireNonNull(user.getBody());
     }
 }

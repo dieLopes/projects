@@ -83,13 +83,13 @@ O primeiro passo que deve ser feito é a criação de um usuário:
 http://localhost:8080/broker/swagger-ui.html#/User%20Service/createUsingPOST_3
 POST http://localhost:8080/broker/api/v1/users
 
-Ao criar o usuário, o sistema irá criar uma carteira para o usuário automaticamente. O ID da carteira ficará disponivel
-no retorno da criação do usuário. O ID da carteira será necessário para a execução de orders de compra e venda de
-ações além de ser necessária para a compra de ações em lote.
+Ao criar o usuário, o sistema irá criar uma carteira para o usuário automaticamente. A carteira mantera o vinculo do
+usuários com suas ações. O CPF do usuário será necessário para a execução de orders de compra e venda de
+ações além de ser necessária para a compra de ações em lote e visualização das informações da carteira.
 
 ####### ORDEM DE COMPRA, VENDA E EM LOTE #######
 
-Para realizar um ordem de compra ou de venda é necessário informar além do ID da carteira, o código da empresa, o tipo
+Para realizar um ordem de compra ou de venda é necessário informar além do CPF do usuário, o código da empresa, o tipo
 da operação (BUY ou SELL) e a quantidade de ações.
 
 - Para criar uma ordem:
@@ -143,14 +143,14 @@ do usuário será apresentado o valor total dos ativos da cartira.
 
 - Buscar carteira
 http://localhost:8080/broker/swagger-ui.html#/Wallet%20Service/findUsingGET_3
-GET http://localhost:8080/broker/api/v1/wallets/{ID_DA_CARTEIRA}
+GET http://localhost:8080/broker/api/v1/wallets/{CPF_DU_USUARIO}
 
 O usuário poderá buscar também todas as ordens ja realizadas na carteira. Ao buscar pelas ordens ele poderá verificar se
 as ordens foram aprovadas ou não a partir do status presente nas ordens.
 
 - Buscar ordens da carteira
 http://localhost:8080/broker/swagger-ui.html#/Wallet%20Service/findOrdersUsingGET
-GET http://localhost:8080/broker/api/v1/wallets/{ID_DA_CARTEIRA}/orders
+GET http://localhost:8080/broker/api/v1/wallets/{CPF_DU_USUARIO}/orders
 
 Além das informações da cartira e das ordens, o usuário poderá buscar a lista de ações que compõem a sua carteira. Será
 apresentado ao usuário o código da ação, a quantidade de ações, o valor total investido na ação e o preço médio pago na
@@ -158,4 +158,4 @@ ação.
 
 - Buscar ações da carteira
 http://localhost:8080/broker/swagger-ui.html#/Wallet%20Service/findStocksUsingGET
-GET http://localhost:8080/broker/api/v1/wallets/{ID_DA_CARTEIRA}/stocks
+GET http://localhost:8080/broker/api/v1/wallets/{CPF_DU_USUARIO}/stocks

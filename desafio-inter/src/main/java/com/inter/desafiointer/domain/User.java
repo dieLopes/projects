@@ -19,6 +19,8 @@ public class User implements Serializable {
     private String id;
     @Column(name = "NAME", nullable = false)
     private String name;
+    @Column(name = "CPF", nullable = false)
+    private String cpf;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "WALLET_ID", referencedColumnName = "id")
     private Wallet wallet;
@@ -37,6 +39,14 @@ public class User implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public Wallet getWallet() {

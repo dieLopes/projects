@@ -25,8 +25,8 @@ public class OrderResponseDTO implements Serializable {
     private BigDecimal totalPrice;
     @ApiModelProperty("Company code")
     private String companyCode;
-    @ApiModelProperty("Wallet id")
-    private String walletId;
+    @ApiModelProperty("User cpf")
+    private String cpf;
     @ApiModelProperty("Order status")
     private String status;
 
@@ -86,12 +86,12 @@ public class OrderResponseDTO implements Serializable {
         this.companyCode = companyCode;
     }
 
-    public String getWalletId() {
-        return walletId;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setWalletId(String walletId) {
-        this.walletId = walletId;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getStatus() {

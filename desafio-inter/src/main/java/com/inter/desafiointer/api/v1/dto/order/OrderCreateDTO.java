@@ -12,7 +12,7 @@ public class OrderCreateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @ApiModelProperty(value = "Wallet id", required = true)
-    private String walletId;
+    private String cpf;
     @ApiModelProperty(value = "Order type", required = true, allowableValues = "BUY,SELL")
     private String type;
     @ApiModelProperty(value = "Company code", required = true)
@@ -20,12 +20,12 @@ public class OrderCreateDTO implements Serializable {
     @ApiModelProperty(value = "Amount company shares", required = true)
     private int amount;
 
-    public String getWalletId() {
-        return walletId;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setWalletId(String walletId) {
-        this.walletId = walletId;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getType() {
@@ -64,8 +64,8 @@ public class OrderCreateDTO implements Serializable {
             return new Builder();
         }
 
-        public Builder walletId (String walletId) {
-            order.walletId = walletId;
+        public Builder cpf (String cpf) {
+            order.cpf = cpf;
             return this;
         }
 

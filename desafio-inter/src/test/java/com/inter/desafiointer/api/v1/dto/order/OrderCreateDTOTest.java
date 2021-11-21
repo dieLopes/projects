@@ -12,12 +12,12 @@ public class OrderCreateDTOTest {
         OrderCreateDTO orderCreateDTO = OrderCreateDTO.Builder.of()
                 .amount(5)
                 .code("BIDI11")
-                .walletId("some-wallet-id")
+                .cpf("11111111111")
                 .type(BUY.toString())
                 .build();
         assertThat(orderCreateDTO.getAmount()).isEqualTo(5);
         assertThat(orderCreateDTO.getCode()).isEqualTo("BIDI11");
-        assertThat(orderCreateDTO.getWalletId()).isEqualTo("some-wallet-id");
+        assertThat(orderCreateDTO.getCpf()).isEqualTo("11111111111");
         assertThat(orderCreateDTO.getType()).isEqualTo(BUY.toString());
     }
 }

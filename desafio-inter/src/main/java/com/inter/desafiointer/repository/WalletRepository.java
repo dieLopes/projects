@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public interface WalletRepository  extends JpaRepository<Wallet, String> {
 
+    Optional<Wallet> findByUserCpf(String cpf);
 }

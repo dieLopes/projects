@@ -47,8 +47,8 @@ public class OrderPersistenceService {
         validateFields(order);
         Company company = companyRepository.findByCodeAndStatus(order.getCode(), ACTIVE)
                 .orElseThrow(() -> new BadRequestException("Company not found with code " + order.getCode()));
-        Wallet wallet = walletRepository.findById(order.getWallet().getId())
-                .orElseThrow(() -> new BadRequestException("Wallet not found with id " + order.getWallet().getId()));
+        Wallet wallet = walletRepository.findByUserCpf(order.getCpf())
+                .orElseThrow(() -> new BadRequestException("Wallet not found for user " + order.getCpf()));
         order.setId(UUID.randomUUID().toString());
         order.setDate(LocalDateTime.now());
         order.setCompany(company);
@@ -69,9 +69,9 @@ public class OrderPersistenceService {
         }
     }
 
-    public List<Order> createRandomOrders (String walletId, BigDecimal total) {
-        Wallet wallet = walletRepository.findById(walletId)
-                .orElseThrow(() -> new BadRequestException("Wallet not found with id " + walletId));
+    public List<Order> createRandomOrders (String cpf, BigDecimal total) {
+        Wallet wallet = walletRepository.findByUserCpf(cpf)
+                .orElseThrow(() -> new BadRequestException("Wallet not found for user " + cpf));
         List<Company> comps = companyRepository.findByStatusOrderByPriceAsc(ACTIVE);
         if (comps.isEmpty()) {
             throw new BadRequestException("There aren't companies to buy");

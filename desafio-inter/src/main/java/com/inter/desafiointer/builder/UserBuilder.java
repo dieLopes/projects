@@ -25,6 +25,11 @@ public class UserBuilder {
         return this;
     }
 
+    public UserBuilder cpf (String cpf) {
+        user.setCpf(cpf);
+        return this;
+    }
+
     public UserBuilder wallet (Wallet wallet) {
         user.setWallet(wallet);
         return this;
