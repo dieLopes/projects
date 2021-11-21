@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class WalletStockResponseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty("User id")
+    @ApiModelProperty("Wallet stock id")
     private String id;
     @ApiModelProperty("Company code")
     private String companyCode;

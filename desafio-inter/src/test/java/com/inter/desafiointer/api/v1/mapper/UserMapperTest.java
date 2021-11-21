@@ -37,7 +37,6 @@ public class UserMapperTest {
         UserResponseDTO userResponseDTO = UserMapper.entityToDTO(user);
         assertThat(userResponseDTO.getId()).isEqualTo(user.getId());
         assertThat(userResponseDTO.getName()).isEqualTo(user.getName());
-        assertThat(userResponseDTO.getWallet().getId()).isEqualTo(user.getWallet().getId());
     }
 
     @Test

@@ -42,7 +42,6 @@ public class UserControllerIT extends BaseIT {
         assertEquals(201, responseEntity.getStatusCodeValue());
         assertNotNull(responseEntity.getBody());
         assertNotNull(responseEntity.getBody().getId());
-        assertNotNull(responseEntity.getBody().getWallet().getId());
         assertEquals("Some Name", responseEntity.getBody().getName());
     }
 

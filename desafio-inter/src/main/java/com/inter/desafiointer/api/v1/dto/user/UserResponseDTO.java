@@ -1,12 +1,13 @@
 package com.inter.desafiointer.api.v1.dto.user;
 
-import com.inter.desafiointer.api.v1.dto.wallet.WalletResponseDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
 @ApiModel(value = "UserResponse")
+@JsonIgnoreProperties("wallet.balance")
 public class UserResponseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -16,8 +17,6 @@ public class UserResponseDTO implements Serializable {
     private String name;
     @ApiModelProperty("User cpf")
     private String cpf;
-    @ApiModelProperty("User wallet")
-    private WalletResponseDTO wallet;
 
     public String getId() {
         return id;
@@ -41,13 +40,5 @@ public class UserResponseDTO implements Serializable {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
-    }
-
-    public WalletResponseDTO getWallet() {
-        return wallet;
-    }
-
-    public void setWallet(WalletResponseDTO wallet) {
-        this.wallet = wallet;
     }
 }
