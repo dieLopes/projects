@@ -26,7 +26,7 @@ public class UserPersistenceServiceTest {
     private UserRepository userRepository;
 
     @Test
-    public void whenCreateCompanyThenSaveCompany () {
+    public void whenCreateUserThenSaveUser () {
         User user = buildUser("Some Name");
         when(userRepository.save(eq(user))).thenReturn(user);
         userPersistenceService.save(user);
@@ -35,7 +35,7 @@ public class UserPersistenceServiceTest {
     }
 
     @Test
-    public void whenCreateCompanyWithoutNameThenReturnBadRequest () {
+    public void whenCreateUserWithoutNameThenReturnBadRequest () {
         User user = buildUser(null);
         assertThatThrownBy(() ->  userPersistenceService.save(user))
                 .isInstanceOf(BadRequestException.class)

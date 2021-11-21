@@ -24,25 +24,25 @@ public class WalletStockPersistenceService {
         this.walletStockRepository = walletStockRepository;
     }
 
-    public WalletStock save (WalletStock walletStock) {
+    protected WalletStock save (WalletStock walletStock) {
         walletStock.setId(UUID.randomUUID().toString());
         return walletStockRepository.save(walletStock);
     }
 
-    public WalletStock update (WalletStock walletStock) {
+    protected WalletStock update (WalletStock walletStock) {
         return walletStockRepository.save(walletStock);
     }
 
     public CompletableFuture<List<Order>> processOrder(List<Order> orders) {
-        List<Order> stocks = new ArrayList<>();
+        List<Order> newOrders = new ArrayList<>();
         orders.forEach(order -> {
             if (OrderType.BUY.equals(order.getType())) {
-                stocks.add(processBuyOrder(order));
+                newOrders.add(processBuyOrder(order));
             } else {
-                stocks.add(processSellOrder(order));
+                newOrders.add(processSellOrder(order));
             }
         });
-        return CompletableFuture.completedFuture(stocks);
+        return CompletableFuture.completedFuture(newOrders);
     }
 
     private Order processBuyOrder (Order order) {
@@ -71,7 +71,6 @@ public class WalletStockPersistenceService {
         if (walletStock.isEmpty()) {
             order.setStatus(OrderStatus.CANCELLED);
         } else {
-            //TODO: Quando a quantidade é zero remove?
             WalletStock stock = walletStock.get();
             if (stock.getAmount() < order.getAmount()) {
                 order.setStatus(OrderStatus.CANCELLED);
