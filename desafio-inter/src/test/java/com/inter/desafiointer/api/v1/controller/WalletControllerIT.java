@@ -112,10 +112,11 @@ public class WalletControllerIT extends BaseIT {
         OrderRandomCreateDTO orderRandomCreateDTO = OrderRandomCreateDTO.Builder.of()
                 .total(new BigDecimal(100))
                 .cpf(cpf)
+                .amount(4)
                 .build();
         restTemplate.postForEntity("http://localhost:" + port + "/broker/api/v1/orders/random",
                 orderRandomCreateDTO, OrderResponseRandomDTO.class).getBody();
-        Thread.sleep(2000);
+        Thread.sleep(3000);
 
         WalletStockResponseListDTO walletStockResponseListDTO = restTemplate.getForObject(
                 "http://localhost:" + port + WALLET_PATH + cpf + "/stocks", WalletStockResponseListDTO.class);
