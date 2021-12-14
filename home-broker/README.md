@@ -24,7 +24,7 @@ Link para o download do docker:
 - https://www.docker.com/products/docker-desktop
 
 Caso não possua o docker instalado, a aplicação pode ser executada via IDE (executando a classe
-DesafioInterApplication.java) ou via CMD executando o comando "java -jar target/desafio-inter.jar".
+DesafioInterApplication.java) ou via CMD executando o comando "java -jar target/home-broker.jar".
 
 ### ACESSANDO O CONSOLE H2 (BANCO DE DADOS)
 
