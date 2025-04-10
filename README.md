@@ -23,3 +23,7 @@
 *design-patterns*
 
 - Projeto de estudo com alguns exemplos de utilização de design patterns
+
+*python_1*
+
+- Projeto de estudo utilizando python, apenas conceitos básicos
