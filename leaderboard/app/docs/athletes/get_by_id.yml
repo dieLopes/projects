@@ -1,0 +1,26 @@
+summary: Get athlete by ID
+tags:
+  - Athletes
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: athlete_id
+    schema:
+      type: integer
+    required: true
+    description: ID of the athlete
+responses:
+  200:
+    description: Athlete data
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: John Doe

@@ -1,0 +1,28 @@
+post:
+  tags:
+    - Workouts
+  summary: Create a new workout
+  security:
+    - Bearer: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Fran
+            description:
+              type: string
+              example: 21-15-9 thrusters and pull-ups
+        examples:
+          workout:
+            summary: Benchmark workout
+            value:
+              name: Fran
+              description: 21-15-9 thrusters and pull-ups
+  responses:
+    201:
+      description: Workout created

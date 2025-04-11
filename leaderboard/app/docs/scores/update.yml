@@ -1,0 +1,24 @@
+summary: Update a score
+tags:
+  - Scores
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: score_id
+    schema:
+      type: integer
+    required: true
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          score:
+            type: number
+            example: 300.0
+responses:
+  200:
+    description: Score updated

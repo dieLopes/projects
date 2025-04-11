@@ -1,0 +1,14 @@
+summary: Delete a workout
+tags:
+  - Workouts
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: workout_id
+    schema:
+      type: integer
+    required: true
+responses:
+  204:
+    description: Workout deleted

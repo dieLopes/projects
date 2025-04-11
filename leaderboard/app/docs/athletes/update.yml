@@ -1,0 +1,24 @@
+summary: Update an athlete
+tags:
+  - Athletes
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: athlete_id
+    schema:
+      type: integer
+    required: true
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Jane Doe
+responses:
+  200:
+    description: Athlete updated

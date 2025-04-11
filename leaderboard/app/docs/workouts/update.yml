@@ -1,0 +1,27 @@
+summary: Update a workout
+tags:
+  - Workouts
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: workout_id
+    schema:
+      type: integer
+    required: true
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Fran
+          description:
+            type: string
+            example: 21-15-9 Thrusters and Pull-ups
+responses:
+  200:
+    description: Workout updated

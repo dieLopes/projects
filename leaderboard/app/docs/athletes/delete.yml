@@ -1,0 +1,14 @@
+summary: Delete an athlete
+tags:
+  - Athletes
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: athlete_id
+    schema:
+      type: integer
+    required: true
+responses:
+  204:
+    description: Athlete deleted

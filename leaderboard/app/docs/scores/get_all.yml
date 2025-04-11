@@ -1,0 +1,23 @@
+summary: Get all scores
+tags:
+  - Scores
+security:
+  - Bearer: []
+responses:
+  200:
+    description: List of scores
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              athlete_id:
+                type: integer
+              workout_id:
+                type: integer
+              score:
+                type: number

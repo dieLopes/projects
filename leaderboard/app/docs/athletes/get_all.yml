@@ -1,0 +1,21 @@
+summary: Get all athletes
+tags:
+  - Athletes
+security:
+  - Bearer: []
+responses:
+  200:
+    description: List of athletes
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: John Doe

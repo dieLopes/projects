@@ -1,0 +1,24 @@
+summary: Create a score
+tags:
+  - Scores
+security:
+  - Bearer: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          athlete_id:
+            type: integer
+            example: 1
+          workout_id:
+            type: integer
+            example: 2
+          score:
+            type: number
+            example: 230.5
+responses:
+  201:
+    description: Score created

@@ -1,0 +1,14 @@
+summary: Delete a score
+tags:
+  - Scores
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: score_id
+    schema:
+      type: integer
+    required: true
+responses:
+  204:
+    description: Score deleted

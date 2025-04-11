@@ -1,0 +1,28 @@
+summary: Get workout by ID
+tags:
+  - Workouts
+security:
+  - Bearer: []
+parameters:
+  - in: path
+    name: workout_id
+    schema:
+      type: integer
+    required: true
+responses:
+  200:
+    description: Workout data
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: Fran
+            description:
+              type: string
+              example: 21-15-9 Thrusters and Pull-ups
