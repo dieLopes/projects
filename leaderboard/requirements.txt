@@ -2,3 +2,7 @@ flask
 flask-sqlalchemy
 flask-migrate
 psycopg2-binary
+flasgger
+pytest
+pytest-flask
+Flask-JWT-Extended==4.6.0

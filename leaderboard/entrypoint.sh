@@ -1,15 +1,10 @@
 #!/bin/bash
 
-# Aguarda o banco estar pronto
-echo "Aguardando o banco de dados iniciar..."
-while ! nc -z db 5432; do
-  sleep 1
-done
+echo "Esperando o banco iniciar..."
+sleep 5
 
-# Aplica as migrations automaticamente
-echo "Aplicando migrations..."
+echo "Rodando migrations..."
 flask db upgrade
 
-# Inicia o app
-echo "Iniciando o servidor Flask..."
-python run.py
+echo "Iniciando a aplicação..."
+exec flask run --host=0.0.0.0
