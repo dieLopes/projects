@@ -1,9 +1,9 @@
 swagger_template = {
     "swagger": "2.0",
     "info": {
-        "title": "CrossFit API",
+        "title": "Leaderboard API",
         "version": "1.0",
-        "description": "API for managing CrossFit athletes, workouts and scores"
+        "description": "API for managing Leaderboard athletes, workouts and scores"
     },
     "securityDefinitions": {
         "Bearer": {
@@ -13,5 +13,7 @@ swagger_template = {
             "description": "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'"
         }
     },
-    "security": [{"Bearer": []}]
+    "security": [{"Bearer": []}],
+    "basePath": "/",
+    "schemes": ["http"],
 }

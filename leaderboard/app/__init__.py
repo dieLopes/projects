@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flasgger import Swagger
+from flask_migrate import upgrade
 
 from app.routes import register_routes
 from app.db import db
@@ -25,7 +26,7 @@ def create_app(config_class=None):
     Swagger(app, template=swagger_template)
 
     with app.app_context():
-        db.create_all()
+        upgrade()
         seed_admin_user()
         register_routes(app)
 

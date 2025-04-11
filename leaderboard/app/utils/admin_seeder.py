@@ -12,4 +12,4 @@ def seed_admin_user():
         )
         db.session.add(admin)
         db.session.commit()
-        print("✅ Admin user created: admin / admin123")
+        print("✅ Admin user created")

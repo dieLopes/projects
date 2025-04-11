@@ -1,3 +1,12 @@
 ### O PROJETO
 
 O projeto foi desenvolvido utilizando Python 3.10.12
+
+### INSTRUÇÕES DE DESENVOLVIMENTO
+
+Ativar Ambiente Virtual: source venv/bin/activate
+
+### MIGRAÇÕES DE BASE
+
+flask db migrate -m "Criação inicial"
+flask db upgrade

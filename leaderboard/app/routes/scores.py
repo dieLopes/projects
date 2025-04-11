@@ -3,11 +3,12 @@ from app.models.score import Score
 from app.db import db
 from flask_jwt_extended import jwt_required
 from flasgger import swag_from
+from app.utils.yml_loader import doc_path
 
 scores_bp = Blueprint('scores', __name__, url_prefix='/scores')
 
 @scores_bp.route('', methods=['POST'])
-@swag_from('docs/scores/create.yml')
+@swag_from(doc_path('scores', 'create.yml'))
 @jwt_required()
 def create_score():
     data = request.get_json()
@@ -21,6 +22,7 @@ def create_score():
     return jsonify({'id': score.id, 'score': score.score}), 201
 
 @scores_bp.route('', methods=['GET'])
+@swag_from(doc_path('scores', 'get_all.yml'))
 @jwt_required()
 def get_scores():
     scores = Score.query.all()
@@ -35,6 +37,7 @@ def get_scores():
     ])
 
 @scores_bp.route('/<int:id>', methods=['PUT'])
+@swag_from(doc_path('scores', 'update.yml'))
 @jwt_required()
 def update_score(id):
     score = Score.query.get_or_404(id)
@@ -51,6 +54,7 @@ def update_score(id):
     })
 
 @scores_bp.route('/<int:id>', methods=['DELETE'])
+@swag_from(doc_path('scores', 'delete.yml'))
 @jwt_required()
 def delete_score(id):
     score = Score.query.get_or_404(id)
